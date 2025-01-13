@@ -35,9 +35,16 @@ class Account
     #[ORM\OneToMany(targetEntity: Minus::class, mappedBy: 'account')]
     private Collection $minuses;
 
+    /**
+     * @var Collection<int, Plus>
+     */
+    #[ORM\OneToMany(targetEntity: Plus::class, mappedBy: 'account')]
+    private Collection $pluses;
+
     public function __construct()
     {
         $this->minuses = new ArrayCollection();
+        $this->pluses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,6 +124,36 @@ class Account
             // set the owning side to null (unless already changed)
             if ($minus->getAccount() === $this) {
                 $minus->setAccount(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Plus>
+     */
+    public function getPluses(): Collection
+    {
+        return $this->pluses;
+    }
+
+    public function addPlus(Plus $plus): static
+    {
+        if (!$this->pluses->contains($plus)) {
+            $this->pluses->add($plus);
+            $plus->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlus(Plus $plus): static
+    {
+        if ($this->pluses->removeElement($plus)) {
+            // set the owning side to null (unless already changed)
+            if ($plus->getAccount() === $this) {
+                $plus->setAccount(null);
             }
         }
 
