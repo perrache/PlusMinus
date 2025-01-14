@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Minus index{% endblock %}
+
+{% block body %}
+    <h1>Minus index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Value</th>
+                <th>Dat</th>
+                <th>Comment</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for minu in minuses %}
+            <tr>
+                <td>{{ minu.id }}</td>
+                <td>{{ minu.value }}</td>
+                <td>{{ minu.dat ? minu.dat|date('Y-m-d') : '' }}</td>
+                <td>{{ minu.comment }}</td>
+                <td>
+                    <a href="{{ path('app_minus_show', {'id': minu.id}) }}">show</a>
+                    <a href="{{ path('app_minus_edit', {'id': minu.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_minus_new') }}">Create new</a>
+{% endblock %}

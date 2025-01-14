@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Minus{% endblock %}
+
+{% block body %}
+    <h1>Edit Minus</h1>
+
+    {{ include('minus/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_minus_index') }}">back to list</a>
+
+    {{ include('minus/_delete_form.html.twig') }}
+{% endblock %}
