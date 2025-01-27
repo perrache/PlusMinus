@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Account;
 use App\Entity\Currency;
 use App\Entity\Organization;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,13 +21,24 @@ class AccountType extends AbstractType
             ->add('bo')
             ->add('currency', EntityType::class, [
                 'class' => Currency::class,
-                'choice_label' => 'id',
+//                'choice_label' => 'id',
+                'choice_label' => 'name',
+                'query_builder' => function (EntityRepository $er): QueryBuilder {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
+                'placeholder' => '=== Select Currency ===',
             ])
             ->add('organization', EntityType::class, [
                 'class' => Organization::class,
-                'choice_label' => 'id',
-            ])
-        ;
+//                'choice_label' => 'id',
+                'choice_label' => 'name',
+                'query_builder' => function (EntityRepository $er): QueryBuilder {
+                    return $er->createQueryBuilder('o')
+                        ->orderBy('o.name', 'ASC');
+                },
+                'placeholder' => '=== Select Organization ===',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

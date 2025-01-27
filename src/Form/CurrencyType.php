@@ -13,8 +13,7 @@ class CurrencyType extends AbstractType
     {
         $builder
             ->add('code')
-            ->add('name')
-        ;
+            ->add('name');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

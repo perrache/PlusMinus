@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\Account;
 use App\Entity\Move;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,13 +23,38 @@ class MoveType extends AbstractType
             ->add('comment')
             ->add('accplus', EntityType::class, [
                 'class' => Account::class,
-                'choice_label' => 'id',
+//                'choice_label' => 'id',
+                'choice_label' => function (Account $account): string {
+                    return $account->getOrganization()->getName() . ' - ' . $account->getName();
+                },
+                'group_by' => function (Account $account): string {
+                    return $account->getOrganization()->getName();
+                },
+                'query_builder' => function (EntityRepository $er): QueryBuilder {
+                    return $er->createQueryBuilder('a')
+                        ->join('a.organization', 'o')
+                        ->orderBy('o.name', 'ASC')
+                        ->addOrderBy('a.name', 'ASC');
+                },
+                'placeholder' => '=== Select Account Plus ===',
             ])
             ->add('accminus', EntityType::class, [
                 'class' => Account::class,
-                'choice_label' => 'id',
-            ])
-        ;
+//                'choice_label' => 'id',
+                'choice_label' => function (Account $account): string {
+                    return $account->getOrganization()->getName() . ' - ' . $account->getName();
+                },
+                'group_by' => function (Account $account): string {
+                    return $account->getOrganization()->getName();
+                },
+                'query_builder' => function (EntityRepository $er): QueryBuilder {
+                    return $er->createQueryBuilder('a')
+                        ->join('a.organization', 'o')
+                        ->orderBy('o.name', 'ASC')
+                        ->addOrderBy('a.name', 'ASC');
+                },
+                'placeholder' => '=== Select Account Minus ===',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
