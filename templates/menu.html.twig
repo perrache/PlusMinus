@@ -1,5 +1,5 @@
 {% set curPath = app.request.get('_route') %}
-{#<div><a href="{{ path('app_main') }}">PlusMinus</a></div>#}
+{{ include('menu1.html.twig', {needPath: 'app_root', aElement: 'PlusMinus'}) }}
 <div>======</div>
 {{ include('menu1.html.twig', {needPath: 'app_kind_index', aElement: 'Kind'}) }}
 {{ include('menu1.html.twig', {needPath: 'app_type_index', aElement: 'Type'}) }}
