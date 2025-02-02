@@ -1,0 +1,24 @@
+{% set curPath = app.request.get('_route') %}
+{#<div><a href="{{ path('app_main') }}">PlusMinus</a></div>#}
+<div>======</div>
+{{ include('menu1.html.twig', {needPath: 'app_kind_index', aElement: 'Kind'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_type_index', aElement: 'Type'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_transaction_index', aElement: 'Transaction'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_currency_index', aElement: 'Currency'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_organization_index', aElement: 'Organization'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_account_index', aElement: 'Account'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_minus_index', aElement: 'Minus'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_source_index', aElement: 'Source'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_plus_index', aElement: 'Plus'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_move_index', aElement: 'Move'}) }}
+<div>======</div>
+{#<div><a href="{{ path('app_sql01') }}">01 - Kinds, Types</a></div>#}
+{#<div><a href="{{ path('app_sql02') }}">02 - Organizations, Accounts</a></div>#}
+{#<div><a href="{{ path('app_sql03') }}">03 - (+-) Control</a></div>#}
+{#<div><a href="{{ path('app_sql04') }}">04 - TransactionMinus</a></div>#}
+{#<div><a href="{{ path('app_sql05a') }}">05a - Comment / comment</a></div>#}
+{#<div><a href="{{ path('app_sql05b') }}">05b - Comment / quantity</a></div>#}
+{#<div><a href="{{ path('app_sql06') }}">06 - Saldo</a></div>#}
+{#<div><a href="{{ path('app_sql07') }}">07 - PlusMinusMax</a></div>#}
+{#<div><a href="{{ path('app_sql08') }}">08 - Bilans</a></div>#}
+{#<div><a href="{{ path('app_sql09') }}">09 - Kinds</a></div>#}
