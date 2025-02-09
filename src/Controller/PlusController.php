@@ -18,7 +18,7 @@ final class PlusController extends AbstractController
     public function index(PlusRepository $plusRepository): Response
     {
         return $this->render('plus/index.html.twig', [
-            'pluses' => $plusRepository->findAll(),
+            'pluses' => $plusRepository->findBy([], ['dat' => 'ASC', 'id' => 'ASC']),
         ]);
     }
 

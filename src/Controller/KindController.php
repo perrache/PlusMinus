@@ -18,7 +18,7 @@ final class KindController extends AbstractController
     public function index(KindRepository $kindRepository): Response
     {
         return $this->render('kind/index.html.twig', [
-            'kinds' => $kindRepository->findAll(),
+            'kinds' => $kindRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 

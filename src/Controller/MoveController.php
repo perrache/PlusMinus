@@ -18,7 +18,7 @@ final class MoveController extends AbstractController
     public function index(MoveRepository $moveRepository): Response
     {
         return $this->render('move/index.html.twig', [
-            'moves' => $moveRepository->findAll(),
+            'moves' => $moveRepository->findBy([], ['dat' => 'ASC', 'id' => 'ASC']),
         ]);
     }
 

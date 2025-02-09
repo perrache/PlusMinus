@@ -18,7 +18,7 @@ final class CurrencyController extends AbstractController
     public function index(CurrencyRepository $currencyRepository): Response
     {
         return $this->render('currency/index.html.twig', [
-            'currencies' => $currencyRepository->findAll(),
+            'currencies' => $currencyRepository->findBy([], ['code' => 'ASC']),
         ]);
     }
 

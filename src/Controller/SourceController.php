@@ -18,7 +18,7 @@ final class SourceController extends AbstractController
     public function index(SourceRepository $sourceRepository): Response
     {
         return $this->render('source/index.html.twig', [
-            'sources' => $sourceRepository->findAll(),
+            'sources' => $sourceRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 

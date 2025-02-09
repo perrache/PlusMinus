@@ -18,7 +18,7 @@ final class OrganizationController extends AbstractController
     public function index(OrganizationRepository $organizationRepository): Response
     {
         return $this->render('organization/index.html.twig', [
-            'organizations' => $organizationRepository->findAll(),
+            'organizations' => $organizationRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 

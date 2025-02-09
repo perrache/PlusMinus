@@ -18,7 +18,7 @@ final class MinusController extends AbstractController
     public function index(MinusRepository $minusRepository): Response
     {
         return $this->render('minus/index.html.twig', [
-            'minuses' => $minusRepository->findAll(),
+            'minuses' => $minusRepository->findBy([], ['dat' => 'ASC', 'id' => 'ASC']),
         ]);
     }
 
