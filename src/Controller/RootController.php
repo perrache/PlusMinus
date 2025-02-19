@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RootController extends AbstractController
 {
-    #[Route('/', name: 'app_root')]
+    #[Route('/', name: 'route_root')]
     public function index(ClockInterface $clock): Response
     {
         $currClock = $clock->withTimeZone('Europe/Warsaw')->now()->format('d-m-Y H:i:s');

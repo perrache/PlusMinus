@@ -14,16 +14,20 @@
     {% endblock %}
 </head>
 <body>
+{% set curPath = app.request.get('_route') %}
+{% set rawDiv1 = '<div class="content1">' %}
+{% set rawDiv2 = '</div>' %}
 <div class="container">
     <div class="menu">
         {{ include('menu.html.twig') }}
     </div>
-    <div class="content">
-        {% block body %}{% endblock %}
-    </div>
-    <div class="content2">
-        {% block body2 %}{% endblock %}
-    </div>
+    {% if curPath|slice(0,4) == 'app_' %}
+        {{ rawDiv1|raw }}
+    {% endif %}
+    {% block body %}{% endblock %}
+    {% if curPath|slice(0,4) == 'app_' %}
+        {{ rawDiv2|raw }}
+    {% endif %}
 </div>
 </body>
 </html>
