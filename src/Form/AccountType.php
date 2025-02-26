@@ -22,6 +22,7 @@ class AccountType extends AbstractType
                 'attr' => ['autofocus' => true],
             ])
             ->add('bo')
+            ->add('lt')
             ->add('currency', EntityType::class, [
                 'class' => Currency::class,
 //                'choice_label' => 'id',

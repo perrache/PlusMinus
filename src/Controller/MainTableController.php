@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,16 +14,16 @@ class MainTableController extends MainSqlController
     {
         if ($tab === 1) {
             $sql1 = $this->sqlx01;
-            $sql2 = '';
+            $sql2 = $this->sqlx01_2;
             $title = '01 - Kinds';
         } elseif ($tab === 2) {
             $sql1 = $this->sqlx02;
             $sql2 = $this->sqlx02_2;
-            $title = '02 - Kinds, Types';
+            $title = '02 - Types';
         } elseif ($tab === 3) {
-            $sql1 = '';
-            $sql2 = '';
-            $title = '';
+            $sql1 = $this->sqlx03;
+            $sql2 = $this->sqlx03_2;
+            $title = '03 - Accounts';
         } else {
             $sql1 = '';
             $sql2 = '';
@@ -32,11 +33,15 @@ class MainTableController extends MainSqlController
         $mask2 = $this->getParameter('app.maska2');
         $mask3 = $this->getParameter('app.maska3');
         $tab = empty($sql2) ? -1 : $tab;
-        $records1 = $conn->fetchAllAssociative($sql1, [
-            'mask1' => $mask1,
-            'mask2' => $mask2,
-            'mask3' => $mask3,
-        ]);
+        try {
+            $records1 = $conn->fetchAllAssociative($sql1, [
+                'mask1' => $mask1,
+                'mask2' => $mask2,
+                'mask3' => $mask3,
+            ]);
+        } catch (Exception $e) {
+            null;
+        }
         $callArray = [
             'records1' => $records1,
             'title' => $title,
@@ -44,12 +49,16 @@ class MainTableController extends MainSqlController
             'id' => $id,
         ];
         if ($id !== 0) {
-            $records2 = $conn->fetchAllAssociative($sql2, [
-                'mask1' => $mask1,
-                'mask2' => $mask2,
-                'mask3' => $mask3,
-                'id' => $id,
-            ]);
+            try {
+                $records2 = $conn->fetchAllAssociative($sql2, [
+                    'mask1' => $mask1,
+                    'mask2' => $mask2,
+                    'mask3' => $mask3,
+                    'id' => $id,
+                ]);
+            } catch (Exception $e) {
+                null;
+            }
             $callArray['records2'] = $records2;
         }
         return $this->render('main_table/table.html.twig', $callArray);

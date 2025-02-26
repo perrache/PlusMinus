@@ -41,6 +41,9 @@ class Account
     #[ORM\OneToMany(targetEntity: Plus::class, mappedBy: 'account')]
     private Collection $pluses;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $lt = null;
+
     public function __construct()
     {
         $this->minuses = new ArrayCollection();
@@ -156,6 +159,18 @@ class Account
                 $plus->setAccount(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLt(): ?int
+    {
+        return $this->lt;
+    }
+
+    public function setLt(?int $lt): static
+    {
+        $this->lt = $lt;
 
         return $this;
     }
