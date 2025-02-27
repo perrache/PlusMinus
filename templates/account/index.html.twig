@@ -10,6 +10,8 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Currency</th>
+                <th>Organization</th>
                 <th>Name</th>
                 <th>Bo</th>
                 <th>Lt</th>
@@ -20,6 +22,8 @@
         {% for account in accounts %}
             <tr>
                 <td>{{ account.id }}</td>
+                <td>{{ account.currency.id }}</td>
+                <td>{{ account.organization.id }}</td>
                 <td>{{ account.name }}</td>
                 <td>{{ account.bo }}</td>
                 <td>{{ account.lt }}</td>

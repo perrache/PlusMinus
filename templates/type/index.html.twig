@@ -10,6 +10,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Kind</th>
                 <th>Name</th>
                 <th>actions</th>
             </tr>
@@ -18,6 +19,7 @@
         {% for type in types %}
             <tr>
                 <td>{{ type.id }}</td>
+                <td>{{ type.kind.id }}</td>
                 <td>{{ type.name }}</td>
                 <td>
                     <a href="{{ path('app_type_show', {'id': type.id}) }}">show</a>
@@ -26,7 +28,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="4">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
