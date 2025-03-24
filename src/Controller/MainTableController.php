@@ -24,6 +24,10 @@ class MainTableController extends MainSqlController
             $sql1 = $this->sqlx03;
             $sql2 = $this->sqlx03_2;
             $title = '03 - Accounts';
+        } elseif ($tab === 4) {
+            $sql1 = $this->sqlx04;
+            $sql2 = $this->sqlx04_2;
+            $title = '04 - Transactions';
         } else {
             $sql1 = '';
             $sql2 = '';
