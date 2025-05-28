@@ -7,7 +7,7 @@ use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MainTableController extends MainSqlController
+final class MainTableController extends MainSqlController
 {
     #[Route('/sql/{tab}/{id}', name: 'route_sql', requirements: ['tab' => '\d+', 'id' => '\d+'], methods: ['GET'])]
     public function sql(Connection $conn, int $tab = 0, int $id = 0): Response

@@ -41,8 +41,11 @@ class Account
     #[ORM\OneToMany(targetEntity: Plus::class, mappedBy: 'account')]
     private Collection $pluses;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: false)]
     private ?int $lt = null;
+
+    #[ORM\Column(nullable: false)]
+    private ?int $import = null;
 
     public function __construct()
     {
@@ -171,6 +174,18 @@ class Account
     public function setLt(?int $lt): static
     {
         $this->lt = $lt;
+
+        return $this;
+    }
+
+    public function getImport(): ?int
+    {
+        return $this->import;
+    }
+
+    public function setImport(?int $import): static
+    {
+        $this->import = $import;
 
         return $this;
     }

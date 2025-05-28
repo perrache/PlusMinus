@@ -7,7 +7,7 @@ use Symfony\Component\Clock\ClockInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class RootController extends AbstractController
+final class RootController extends AbstractController
 {
     #[Route('/', name: 'route_root')]
     public function index(ClockInterface $clock): Response

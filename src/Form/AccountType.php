@@ -23,6 +23,7 @@ class AccountType extends AbstractType
             ])
             ->add('bo')
             ->add('lt')
+            ->add('import')
             ->add('currency', EntityType::class, [
                 'class' => Currency::class,
 //                'choice_label' => 'id',
