@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Import1{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        td > div {
+            text-align: center;
+            color: red;
+            margin: 0;
+            padding: 0
+        }
+        td.center {
+            text-align: center;
+        }
+        td.right {
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="content1">
+        <h1>Import1</h1>
+        <h3>{{ records1|length }} records, W = {{ varWhere }}, O = {{ varOrder }}</h3>
+        <a href="{{ path('route_imp_import1_reset') }}">Reset</a>
+        <a href="{{ path('route_imp_import1_w2') }}">W2</a>
+        <a href="{{ path('route_imp_import1_o2') }}">O2</a>
+        <table>
+            <tr>
+                <th>Data księgowania</th>
+                <th>Data operacji</th>
+                <th>X</th>
+                <th>Kwota</th>
+                <th>Last</th>
+                <th>Use</th>
+                <th>&nbsp;</th>
+            </tr>
+            {% for record1 in records1 %}
+                <tr>
+                    <td class="center">{{ record1.postingdate }}</td>
+                    <td class="center">{{ record1.valuedate }}</td>
+                    <td>
+                        <div>{{ record1.x }}</div>
+                    </td>
+                    <td class="right">{{ record1.value }}</td>
+                    <td class="center">{{ record1.last }}</td>
+                    <td class="center">{{ record1.use }}</td>
+                    <td>
+                        <a href="dupa">dupa</a>
+                        <a href="dupa">dupa</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

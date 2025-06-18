@@ -6,7 +6,6 @@ use App\Entity\Import1;
 use App\Form\PlikDoTabeli1Type;
 use App\Repository\Import1Repository;
 use App\Service\StringConverter;
-use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
@@ -18,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/imp')]
 final class ImportController extends AbstractController
 {
-    #[Route('/plikdotabeli1', name: 'route_imp_plikdotabeli1')]
+    #[Route('/plikdotabeli1', name: 'route_imp_plikdotabeli1', methods: ['GET'])]
     public function plikdotabeli1(Request                $request,
                                   StringConverter        $stringConverter,
                                   ClockInterface         $clock,
@@ -67,7 +66,7 @@ final class ImportController extends AbstractController
                         $import1->setBillsource($fileRow[3]);
                         $import1->setBilldestination($fileRow[4]);
                         $import1->setTitle($fileRow[5]);
-                        $import1->setValue((int)((float)$fileRow[6] * 100));
+                        $import1->setValue((int)(((float)strtr($fileRow[6], ',', '.')) * 100));
                         $import1->setTransaction($fileRow[7]);
                         $import1->setType($fileRow[8]);
                         $import1->setCategory($fileRow[9]);
@@ -88,36 +87,35 @@ final class ImportController extends AbstractController
         return $this->render('import/plikdotabeli.html.twig', ['form' => $form]);
     }
 
-    #[Route('/plikdotabeli2', name: 'route_imp_plikdotabeli2')]
-    public function plikdotabeli2(Connection $conn): Response
+    #[Route('/import1', name: 'route_imp_import1', methods: ['GET'])]
+    public function import1(Import1Repository $import1Repository): Response
     {
-        return $this->render('import/plikdotabeli2.html.twig');
+        return $this->render('import/import1.html.twig', [
+            'records1' => $import1Repository->Import1List(),
+            'varWhere' => \App\DTO\Import1Var::$varWhere,
+            'varOrder' => \App\DTO\Import1Var::$varOrder,
+        ]);
+    }
+
+    #[Route('/import1reset', name: 'route_imp_import1_reset', methods: ['GET'])]
+    public function import1reset(): Response
+    {
+        \App\DTO\Import1Var::$varWhere = 1;
+        \App\DTO\Import1Var::$varOrder = 1;
+        return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/import1w2', name: 'route_imp_import1_w2', methods: ['GET'])]
+    public function import1w2(): Response
+    {
+        \App\DTO\Import1Var::$varWhere = 2;
+        return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/import1o2', name: 'route_imp_import1_o2', methods: ['GET'])]
+    public function import1o2(): Response
+    {
+        \App\DTO\Import1Var::$varOrder = 2;
+        return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
     }
 }
-
-
-// UserRepository.php
-//$entityManager = $this->getEntityManager();
-//$conn = $entityManager->getConnection();
-//return $conn->executeQuery("SELECT * FROM user")->fetchAll();
-
-//$db = Doctrine_Manager::getInstance()->getCurrentConnection();
-//$query = $db->prepare("SELECT `someField` FROM `someTable` WHERE `field` = :value");
-//$query->execute(array('value' => 'someValue'));
-
-//$conn = $this->getEntityManager()->getConnection();
-//        $sql = 'SELECT * FROM fortune_cookie';
-//        $stmt = $conn->prepare($sql);
-//        $result = $stmt->executeQuery();
-//        dd($result->fetchAllAssociative());
-
-//$logs = [];
-//$logs[] = 'dupa';
-//$sql = "update import1 set contractor = 'dupa' where id = 430";
-//try {
-//    $res = $conn->prepare($sql)->executeStatement();
-//} catch (Exception $e) {
-//    $logs[] = $e->getMessage();
-//}
-//return $this->render('import/log.html.twig', ['logs' => $logs]);
-
