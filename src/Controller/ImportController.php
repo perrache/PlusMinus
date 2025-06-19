@@ -6,6 +6,7 @@ use App\Entity\Import1;
 use App\Form\PlikDoTabeli1Type;
 use App\Repository\Import1Repository;
 use App\Service\StringConverter;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
@@ -104,7 +105,11 @@ final class ImportController extends AbstractController
     #[Route('/import1useOnly/{iid}', name: 'route_imp_import1_useOnly', methods: ['GET'])]
     public function import1useOnly(Connection $conn, int $iid = 0): Response
     {
-        $res = $conn->prepare("update import1 set use = 1 where id = $iid")->executeStatement();
+        try {
+            $res = $conn->prepare("update import1 set use = 1 where id = $iid")->executeStatement();
+        } catch (Exception $e) {
+            return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+        }
         return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
     }
 
