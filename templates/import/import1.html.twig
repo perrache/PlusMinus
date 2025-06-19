@@ -4,17 +4,37 @@
 
 {% block stylesheets %}
     <style>
-        td > div {
-            text-align: center;
-            color: red;
+        td > p {
+            text-align: left;
             margin: 0;
             padding: 0
         }
+        td.left {
+            text-align: left;
+        }
         td.center {
             text-align: center;
+            white-space: nowrap;
         }
         td.right {
             text-align: right;
+        }
+        div.inside-center {
+            text-align: center;
+            margin: 0;
+            padding: 0
+        }
+        div.inside-right {
+            text-align: right;
+            font-size: 1.5em;
+            margin: 0;
+            padding: 0
+        }
+        div.red {
+            color: red;
+        }
+        div.green {
+            color: green;
         }
     </style>
 {% endblock %}
@@ -25,12 +45,24 @@
         <h3>{{ records1|length }} records, W = {{ varWhere }}, O = {{ varOrder }}</h3>
         <a href="{{ path('route_imp_import1_reset') }}">Reset</a>
         <a href="{{ path('route_imp_import1_w2') }}">W2</a>
+        <a href="{{ path('route_imp_import1_w3') }}">W3</a>
+        <a href="{{ path('route_imp_import1_w4') }}">W4</a>
         <a href="{{ path('route_imp_import1_o2') }}">O2</a>
+        <h3>W1 - where true</h3>
+        <h3>W2 - where i.last = 1</h3>
+        <h3>W3 - where i.use = 1</h3>
+        <h3>W4 - where i.last = 1 and i.use = 1</h3>
+        <h3>O1 - order by i.valuedate desc, i.id</h3>
+        <h3>O2 - order by i.postingdate desc, i.id</h3>
         <table>
             <tr>
+                <th>Id</th>
                 <th>Data księgowania</th>
                 <th>Data operacji</th>
                 <th>X</th>
+                <th>Typ operacji</th>
+                <th>Szczegóły operacji</th>
+                <th>Kategoria</th>
                 <th>Kwota</th>
                 <th>Last</th>
                 <th>Use</th>
@@ -38,17 +70,38 @@
             </tr>
             {% for record1 in records1 %}
                 <tr>
-                    <td class="center">{{ record1.postingdate }}</td>
-                    <td class="center">{{ record1.valuedate }}</td>
-                    <td>
-                        <div>{{ record1.x }}</div>
+                    <td class="right">{{ record1.idalias }}</td>
+                    <td class="center">{{ record1.postingdatealias }}</td>
+                    <td class="center">{{ record1.valuedatealias }}</td>
+                    <td class="center">
+                        <div class="inside-center red">{{ record1.x }}</div>
                     </td>
-                    <td class="right">{{ record1.value }}</td>
-                    <td class="center">{{ record1.last }}</td>
-                    <td class="center">{{ record1.use }}</td>
+                    <td class="left">{{ record1.typealias }}</td>
+                    <td class="left">
+                        <p>{{ record1.contractoralias }}</p>
+                        <p>{{ record1.titlealias }}</p>
+                    </td>
+                    <td class="left">{{ record1.categoryalias }}</td>
+                    {% if record1.valuealias > 0 %}
+                        <td class="right">
+                            <div class="inside-right green">{{ record1.valuealias }}</div>
+                        </td>
+                    {% elseif record1.valuealias < 0 %}
+                        <td class="right">
+                            <div class="inside-right red">{{ record1.valuealias }}</div>
+                        </td>
+                    {% else %}
+                        <td class="right">
+                            <div class="inside-right">{{ record1.valuealias }}</div>
+                        </td>
+                    {% endif %}
+                    <td class="center">{{ record1.lastalias }}</td>
+                    <td class="center">{{ record1.usealias }}</td>
                     <td>
-                        <a href="dupa">dupa</a>
-                        <a href="dupa">dupa</a>
+                        {% if record1.valuealias < 0 %}
+                            <a href="dupa">import</a>
+                        {% endif %}
+                        <a href="/imp/import1useOnly/{{ record1.idalias }}">onlyUse</a>
                     </td>
                 </tr>
             {% endfor %}

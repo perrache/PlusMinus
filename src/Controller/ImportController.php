@@ -88,34 +88,64 @@ final class ImportController extends AbstractController
     }
 
     #[Route('/import1', name: 'route_imp_import1', methods: ['GET'])]
-    public function import1(Import1Repository $import1Repository): Response
+    public function import1(Import1Repository $import1Repository,
+                            Request           $request): Response
     {
+        $session = $request->getSession();
+        if (!$session->has('varWhere')) $session->set('varWhere', 1);
+        if (!$session->has('varOrder')) $session->set('varOrder', 1);
         return $this->render('import/import1.html.twig', [
-            'records1' => $import1Repository->Import1List(),
-            'varWhere' => \App\DTO\Import1Var::$varWhere,
-            'varOrder' => \App\DTO\Import1Var::$varOrder,
+            'records1' => $import1Repository->Import1List($session->get('varWhere', 1), $session->get('varOrder', 1)),
+            'varWhere' => $session->get('varWhere', 1),
+            'varOrder' => $session->get('varOrder', 1),
         ]);
     }
 
-    #[Route('/import1reset', name: 'route_imp_import1_reset', methods: ['GET'])]
-    public function import1reset(): Response
+    #[Route('/import1useOnly/{iid}', name: 'route_imp_import1_useOnly', methods: ['GET'])]
+    public function import1useOnly(Connection $conn, int $iid = 0): Response
     {
-        \App\DTO\Import1Var::$varWhere = 1;
-        \App\DTO\Import1Var::$varOrder = 1;
+        $res = $conn->prepare("update import1 set use = 1 where id = $iid")->executeStatement();
+        return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/import1reset', name: 'route_imp_import1_reset', methods: ['GET'])]
+    public function import1reset(Request $request): Response
+    {
+        $session = $request->getSession();
+        $session->set('varWhere', 1);
+        $session->set('varOrder', 1);
         return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/import1w2', name: 'route_imp_import1_w2', methods: ['GET'])]
-    public function import1w2(): Response
+    public function import1w2(Request $request): Response
     {
-        \App\DTO\Import1Var::$varWhere = 2;
+        $session = $request->getSession();
+        $session->set('varWhere', 2);
+        return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/import1w3', name: 'route_imp_import1_w3', methods: ['GET'])]
+    public function import1w3(Request $request): Response
+    {
+        $session = $request->getSession();
+        $session->set('varWhere', 3);
+        return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/import1w4', name: 'route_imp_import1_w4', methods: ['GET'])]
+    public function import1w4(Request $request): Response
+    {
+        $session = $request->getSession();
+        $session->set('varWhere', 4);
         return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/import1o2', name: 'route_imp_import1_o2', methods: ['GET'])]
-    public function import1o2(): Response
+    public function import1o2(Request $request): Response
     {
-        \App\DTO\Import1Var::$varOrder = 2;
+        $session = $request->getSession();
+        $session->set('varOrder', 2);
         return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
     }
 }
