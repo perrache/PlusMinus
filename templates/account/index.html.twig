@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Account index{% endblock %}
+
+{% block body %}
+    <h1>Account index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Bo</th>
+                <th>Lt</th>
+                <th>Import</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for account in accounts %}
+            <tr>
+                <td>{{ account.id }}</td>
+                <td>{{ account.name }}</td>
+                <td>{{ account.bo }}</td>
+                <td>{{ account.lt }}</td>
+                <td>{{ account.import }}</td>
+                <td>
+                    <a href="{{ path('app_account_show', {'id': account.id}) }}">show</a>
+                    <a href="{{ path('app_account_edit', {'id': account.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_account_new') }}">Create new</a>
+{% endblock %}
