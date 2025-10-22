@@ -1,0 +1,18 @@
+{# curTab #}
+{# aElement #}
+
+{#{{ app.request.get('tab') }}#}
+{#{{ app.request.get('_route') }}#}
+{#{{ curTab }}#}
+
+{% if curTab is defined and aElement is defined %}
+    {% if app.request.get('_route') == 'route_sql' and curTab == app.request.get('tab') %}
+        {% set extra = ' style="color: yellow"' %}
+    {% else %}
+        {% set extra = '' %}
+    {% endif %}
+
+    <div>
+        <a href="{{ path('route_sql') }}/{{ curTab }}"{{ extra|raw }}>{{ '%02u - '|format(curTab) }}{{ aElement }}</a>
+    </div>
+{% endif %}

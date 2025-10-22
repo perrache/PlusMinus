@@ -1,0 +1,15 @@
+{# curPath #}
+{# needPath #}
+{# aElement #}
+
+{% if curPath is defined and needPath is defined and aElement is defined %}
+    {% if curPath == needPath %}
+        {% set extra = ' style="color: yellow"' %}
+    {% else %}
+        {% set extra = '' %}
+    {% endif %}
+
+    <div>
+        <a href="{{ path(needPath) }}"{{ extra|raw }}>{{ aElement }}</a>
+    </div>
+{% endif %}

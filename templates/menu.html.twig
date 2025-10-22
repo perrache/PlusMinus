@@ -1,0 +1,33 @@
+{% set curPath = app.request.get('_route') %}
+{{ include('menu1.html.twig', {needPath: 'route_root', aElement: 'PlusMinus'}) }}
+<div>======</div>
+{{ include('menu1.html.twig', {needPath: 'app_kind_index', aElement: 'Kind'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_type_index', aElement: 'Type'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_transaction_index', aElement: 'Transaction'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_currency_index', aElement: 'Currency'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_organization_index', aElement: 'Organization'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_account_index', aElement: 'Account'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_source_index', aElement: 'Source'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_minus_index', aElement: 'Minus'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_move_index', aElement: 'Move'}) }}
+{{ include('menu1.html.twig', {needPath: 'app_plus_index', aElement: 'Plus'}) }}
+<div>======</div>
+{{ include('menu1.html.twig', {needPath: 'route_imp_plikdotabeli1', aElement: 'PlikDoTabeli1'}) }}
+{{ include('menu1.html.twig', {needPath: 'route_imp_import1', aElement: 'Import1'}) }}
+<div>======</div>
+{% for key, mArray in sqlService.menuArray %}
+    {{ include('menu2.html.twig', {curTab: key, aElement: mArray[2]}) }}
+{% endfor %}
+{#{{ include('menu2.html.twig', {curTab: '1', aElement: 'Kinds(+minus)'}) }}#}
+{#{{ include('menu2.html.twig', {curTab: '2', aElement: 'Types(+minus)'}) }}#}
+{#{{ include('menu2.html.twig', {curTab: '3', aElement: 'Accounts'}) }}#}
+{#{{ include('menu2.html.twig', {curTab: '4', aElement: 'Transactions(+minus)'}) }}#}
+{#{{ include('menu2.html.twig', {curTab: '5', aElement: 'Kinds / Types'}) }}#}
+
+{# <div><a href="{{ path('route_sql03') }}">03 - (+-) Control</a></div> #}
+{# <div><a href="{{ path('route_sql04') }}">04 - TransactionMinus</a></div> #}
+{# <div><a href="{{ path('route_sql05a') }}">05a - Comment / comment</a></div> #}
+{# <div><a href="{{ path('route_sql05b') }}">05b - Comment / quantity</a></div> #}
+{# <div><a href="{{ path('route_sql06') }}">06 - Saldo</a></div> #}
+{# <div><a href="{{ path('route_sql07') }}">07 - PlusMinusMax</a></div> #}
+{# <div><a href="{{ path('route_sql08') }}">08 - Bilans</a></div> #}
