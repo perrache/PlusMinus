@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
-    <link rel="icon"
-          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-    {% block stylesheets %}
-    {% endblock %}
-    <link rel="stylesheet" type="text/css" href="http://localhost:8088/main.css?v={{ 'now'|date('YmdHis') }}">
+    {#    <link rel="icon" #}
+    {#          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>"> #}
+    <style>
+        {% block stylesheets %}
+        {% endblock %}
+        {% include('style.css') %}
+    </style>
+    {#    <link rel="stylesheet" type="text/css" href="http://localhost:8088/main.css?v={{ 'now'|date('YmdHis') }}"> #}
     {% block javascripts %}
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {#        {% block importmap %}{{ importmap('app') }}{% endblock %} #}
     {% endblock %}
 </head>
 <body>
@@ -20,11 +23,11 @@
     <div class="menu">
         {% include('menu.html.twig') %}
     </div>
-    {% if curPath|slice(0,4) == 'app_' %}
+    {% if curPath|slice(0,4) == 'app_' %}   {# ekrany CRUD w content1 obok menu #}
         {{ rawDiv1|raw }}
     {% endif %}
     {% block body %}{% endblock %}
-    {% if curPath|slice(0,4) == 'app_' %}
+    {% if curPath|slice(0,4) == 'app_' %}   {# pozostałe ekrany zawierają divy z klasami #}
         {{ rawDiv2|raw }}
     {% endif %}
 </div>
