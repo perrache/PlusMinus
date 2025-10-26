@@ -4,12 +4,23 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    ### PLW
+    app.maska1: '999 999 990"."99'
+    app.maska2: 'YYYY / MM'
+    app.maska3: 'DD-MM-YYYY'
+    ### PLW
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        ### PLW
+#        bind:
+#            $mask1: '999 999 990"."99'
+#            $mask2: 'YYYY / MM'
+#            $mask3: 'DD-MM-YYYY'
+        ### PLW
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

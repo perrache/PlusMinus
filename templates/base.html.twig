@@ -16,7 +16,7 @@
     {% endblock %}
 </head>
 <body>
-{% set curPath = app.request.get('_route') %}
+{% set curPath = app.current_route %}
 {% set rawDiv1 = '<div class="content1">' %}
 {% set rawDiv2 = '</div>' %}
 <div class="container">
