@@ -15,9 +15,9 @@ final class TableController extends AbstractController
     public function sql(Connection $conn, SqlService $sqlService, int $tab = 0, int $id = 0): Response
     {
         if ($tab <= 0) return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+        $title = $sqlService->sqlArray[$tab]['title'];
         $sql1 = $sqlService->sqlArray[$tab]['sql1'];
         $sql2 = $sqlService->sqlArray[$tab]['sql2'];
-        $title = $sqlService->sqlArray[$tab]['title'];
         $mask1 = $this->getParameter('app.maska1');
         $mask2 = $this->getParameter('app.maska2');
         $mask3 = $this->getParameter('app.maska3');
