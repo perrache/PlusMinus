@@ -4,16 +4,16 @@
 
 {% block body %}
     <h1>Currency index</h1>
-    <a href="{{ path('app_currency_new') }}">Create new</a>
+    <div class="new"><a href="{{ path('app_currency_new') }}">Create new</a></div>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Code</th>
-                <th>Name</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for currency in currencies %}
@@ -34,5 +34,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_currency_new') }}">Create new</a>
+    <div class="new"><a href="{{ path('app_currency_new') }}">Create new</a></div>
 {% endblock %}

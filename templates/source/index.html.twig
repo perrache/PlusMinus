@@ -4,15 +4,15 @@
 
 {% block body %}
     <h1>Source index</h1>
-    <a href="{{ path('app_source_new') }}">Create new</a>
+    <div class="new"><a href="{{ path('app_source_new') }}">Create new</a></div>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for source in sources %}
@@ -32,5 +32,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_source_new') }}">Create new</a>
+    <div class="new"><a href="{{ path('app_source_new') }}">Create new</a></div>
 {% endblock %}

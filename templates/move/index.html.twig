@@ -4,17 +4,17 @@
 
 {% block body %}
     <h1>Move index</h1>
-    <a href="{{ path('app_move_new') }}">Create new</a>
+    <div class="new"><a href="{{ path('app_move_new') }}">Create new</a></div>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Value</th>
-                <th>Dat</th>
-                <th>Comment</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Value</th>
+            <th>Dat</th>
+            <th>Comment</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for move in moves %}
@@ -36,5 +36,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_move_new') }}">Create new</a>
+    <div class="new"><a href="{{ path('app_move_new') }}">Create new</a></div>
 {% endblock %}

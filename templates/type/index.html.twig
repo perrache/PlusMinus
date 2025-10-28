@@ -4,15 +4,15 @@
 
 {% block body %}
     <h1>Type index</h1>
-    <a href="{{ path('app_type_new') }}">Create new</a>
+    <div class="new"><a href="{{ path('app_type_new') }}">Create new</a></div>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for type in types %}
@@ -32,5 +32,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_type_new') }}">Create new</a>
+    <div class="new"><a href="{{ path('app_type_new') }}">Create new</a></div>
 {% endblock %}
