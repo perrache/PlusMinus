@@ -6,7 +6,7 @@ class SqlService
 {
     public array $sqlArray = [
         1 => [
-            'title' => 'Dictionary-Kinds-Types',
+            'title' => 'Dictionary-Kind-Type',
             'sql1' => '
 select k.name skind, k.id sid
 from kind k
@@ -16,6 +16,19 @@ select t.name stype, t.id sid
 from type t
 where t.kind_id = :id
 order by stype',
+        ],
+        2 => [
+            'title' => 'Dictionary-Organization-Account',
+            'sql1' => '
+select o.name sorganization, o.id sid
+from organization o
+order by sorganization',
+            'sql2' => '
+select a.name saccount, c.code scode, a.id sid
+from account a
+    join currency c on c.id = a.currency_id
+where a.organization_id = :id
+order by saccount',
         ],
         4 => [
             'title' => 'Transactions(+minus)',

@@ -18,7 +18,7 @@ final class KindController extends AbstractController
     public function index(KindRepository $kindRepository): Response
     {
         return $this->render('kind/index.html.twig', [
-            'kinds' => $kindRepository->findAll(),
+            'kinds' => $kindRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 
@@ -71,7 +71,7 @@ final class KindController extends AbstractController
     #[Route('/{id}', name: 'app_kind_delete', methods: ['POST'])]
     public function delete(Request $request, Kind $kind, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$kind->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $kind->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($kind);
             $entityManager->flush();
         }

@@ -18,7 +18,7 @@ final class MinusController extends AbstractController
     public function index(MinusRepository $minusRepository): Response
     {
         return $this->render('minus/index.html.twig', [
-            'minuses' => $minusRepository->findAll(),
+            'minuses' => $minusRepository->findBy([], ['dat' => 'DESC', 'id' => 'DESC']),
         ]);
     }
 
@@ -71,7 +71,7 @@ final class MinusController extends AbstractController
     #[Route('/{id}', name: 'app_minus_delete', methods: ['POST'])]
     public function delete(Request $request, Minus $minu, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$minu->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $minu->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($minu);
             $entityManager->flush();
         }

@@ -18,7 +18,7 @@ final class AccountController extends AbstractController
     public function index(AccountRepository $accountRepository): Response
     {
         return $this->render('account/index.html.twig', [
-            'accounts' => $accountRepository->findAll(),
+            'accounts' => $accountRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 
@@ -71,7 +71,7 @@ final class AccountController extends AbstractController
     #[Route('/{id}', name: 'app_account_delete', methods: ['POST'])]
     public function delete(Request $request, Account $account, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$account->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $account->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($account);
             $entityManager->flush();
         }

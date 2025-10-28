@@ -18,7 +18,7 @@ final class TransactionController extends AbstractController
     public function index(TransactionRepository $transactionRepository): Response
     {
         return $this->render('transaction/index.html.twig', [
-            'transactions' => $transactionRepository->findAll(),
+            'transactions' => $transactionRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 
@@ -71,7 +71,7 @@ final class TransactionController extends AbstractController
     #[Route('/{id}', name: 'app_transaction_delete', methods: ['POST'])]
     public function delete(Request $request, Transaction $transaction, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$transaction->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $transaction->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($transaction);
             $entityManager->flush();
         }

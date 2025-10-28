@@ -18,7 +18,7 @@ final class TypeController extends AbstractController
     public function index(TypeRepository $typeRepository): Response
     {
         return $this->render('type/index.html.twig', [
-            'types' => $typeRepository->findAll(),
+            'types' => $typeRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 
@@ -71,7 +71,7 @@ final class TypeController extends AbstractController
     #[Route('/{id}', name: 'app_type_delete', methods: ['POST'])]
     public function delete(Request $request, Type $type, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$type->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $type->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($type);
             $entityManager->flush();
         }

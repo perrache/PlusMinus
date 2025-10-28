@@ -18,7 +18,7 @@ final class CurrencyController extends AbstractController
     public function index(CurrencyRepository $currencyRepository): Response
     {
         return $this->render('currency/index.html.twig', [
-            'currencies' => $currencyRepository->findAll(),
+            'currencies' => $currencyRepository->findBy([], ['code' => 'ASC']),
         ]);
     }
 
@@ -71,7 +71,7 @@ final class CurrencyController extends AbstractController
     #[Route('/{id}', name: 'app_currency_delete', methods: ['POST'])]
     public function delete(Request $request, Currency $currency, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$currency->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $currency->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($currency);
             $entityManager->flush();
         }

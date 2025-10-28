@@ -18,7 +18,7 @@ final class PlusController extends AbstractController
     public function index(PlusRepository $plusRepository): Response
     {
         return $this->render('plus/index.html.twig', [
-            'pluses' => $plusRepository->findAll(),
+            'pluses' => $plusRepository->findBy([], ['dat' => 'ASC', 'id' => 'ASC']),
         ]);
     }
 
@@ -71,7 +71,7 @@ final class PlusController extends AbstractController
     #[Route('/{id}', name: 'app_plus_delete', methods: ['POST'])]
     public function delete(Request $request, Plus $plu, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$plu->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $plu->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($plu);
             $entityManager->flush();
         }

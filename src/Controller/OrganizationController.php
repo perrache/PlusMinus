@@ -18,7 +18,7 @@ final class OrganizationController extends AbstractController
     public function index(OrganizationRepository $organizationRepository): Response
     {
         return $this->render('organization/index.html.twig', [
-            'organizations' => $organizationRepository->findAll(),
+            'organizations' => $organizationRepository->findBy([], ['name' => 'ASC']),
         ]);
     }
 
@@ -71,7 +71,7 @@ final class OrganizationController extends AbstractController
     #[Route('/{id}', name: 'app_organization_delete', methods: ['POST'])]
     public function delete(Request $request, Organization $organization, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$organization->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $organization->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($organization);
             $entityManager->flush();
         }

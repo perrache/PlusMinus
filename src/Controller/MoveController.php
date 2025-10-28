@@ -18,7 +18,7 @@ final class MoveController extends AbstractController
     public function index(MoveRepository $moveRepository): Response
     {
         return $this->render('move/index.html.twig', [
-            'moves' => $moveRepository->findAll(),
+            'moves' => $moveRepository->findBy([], ['dat' => 'ASC', 'id' => 'ASC']),
         ]);
     }
 
@@ -71,7 +71,7 @@ final class MoveController extends AbstractController
     #[Route('/{id}', name: 'app_move_delete', methods: ['POST'])]
     public function delete(Request $request, Move $move, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$move->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $move->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($move);
             $entityManager->flush();
         }
