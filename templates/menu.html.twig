@@ -12,7 +12,7 @@
 {{ include('menu1.html.twig', {needPath: 'app_move_index', aElement: 'Move'}) }}
 {{ include('menu1.html.twig', {needPath: 'app_plus_index', aElement: 'Plus'}) }}
 <div>======</div>
-{# {{ include('menu1.html.twig', {needPath: 'route_imp_plikdotabeli1', aElement: 'PlikDoTabeli1'}) }} #}
+{{ include('menu1.html.twig', {needPath: 'route_imp_plikdotabeli1', aElement: 'PlikDoTabeli1'}) }}
 {# {{ include('menu1.html.twig', {needPath: 'route_imp_import1', aElement: 'Import1'}) }} #}
 <div>======</div>
 {% for key, mArray in sqlService.sqlArray %}

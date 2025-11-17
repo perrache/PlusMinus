@@ -10,7 +10,9 @@
             <table>
                 <tr>
                     {% for col in records1.(0)|keys %}
-                        <th>{{ col|slice(1)|humanize }}</th>
+                        {% if col|first != 'x' %}
+                            <th>{{ col|slice(1)|humanize }}</th>
+                        {% endif %}
                     {% endfor %}
                     {% if tab >= 0 %}
                         <th>&nbsp;</th>
@@ -19,7 +21,19 @@
                 {% for record1 in records1 %}
                     <tr>
                         {% for col in record1|keys %}
-                            <td{% if col|first == 'n' %} style="text-align: right"{% endif %}>{{ record1.(col) == '0.00' ? '' : record1.(col) }}</td>
+                            {% if col|first != 'x' %}
+                                {% if col|first == 'n' %}
+                                    {% set tdStyle = ' style="text-align: right"' %}
+                                {% else %}
+                                    {% set tdStyle = '' %}
+                                {% endif %}
+                                {% if record1.(col) == '0.00' %}
+                                    {% set tdElement = '' %}
+                                {% else %}
+                                    {% set tdElement = record1.(col) %}
+                                {% endif %}
+                                <td{{ tdStyle|raw }}>{{ tdElement }}</td>
+                            {% endif %}
                         {% endfor %}
                         {% if tab >= 0 %}
                             <td>
@@ -35,18 +49,22 @@
     </div>
     {% if records2.(0) is defined %}
         <div class="content2">
-            <h1>{{ title }}</h1>
+            <h1>Details</h1>
             <h3>{{ records2|length }} records</h3>
             <table>
                 <tr>
                     {% for col in records2.(0)|keys %}
-                        <th>{{ col|slice(1)|humanize }}</th>
+                        {% if col|first != 'x' %}
+                            <th>{{ col|slice(1)|humanize }}</th>
+                        {% endif %}
                     {% endfor %}
                 </tr>
                 {% for record2 in records2 %}
                     <tr>
                         {% for col in record2|keys %}
-                            <td{% if col|first == 'n' %} style="text-align: right"{% endif %}>{{ record2.(col) == '0.00' ? '' : record2.(col) }}</td>
+                            {% if col|first != 'x' %}
+                                <td{% if col|first == 'n' %} style="text-align: right"{% endif %}>{{ record2.(col) == '0.00' ? '' : record2.(col) }}</td>
+                            {% endif %}
                         {% endfor %}
                     </tr>
                 {% endfor %}

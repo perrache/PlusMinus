@@ -22,4 +22,5 @@
 ###> perrache ###
 .DS_Store
 /.idea/
+/public/import/
 ###< perrache ###
