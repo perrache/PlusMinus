@@ -35,6 +35,9 @@ class Minus
     #[ORM\JoinColumn(nullable: false)]
     private ?Account $account = null;
 
+    #[ORM\Column(length: 16, nullable: true)]
+    private ?string $refer = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -108,6 +111,18 @@ class Minus
     public function setAccount(?Account $account): static
     {
         $this->account = $account;
+
+        return $this;
+    }
+
+    public function getRefer(): ?string
+    {
+        return $this->refer;
+    }
+
+    public function setRefer(?string $refer): static
+    {
+        $this->refer = $refer;
 
         return $this;
     }

@@ -22,15 +22,15 @@ final class TableController extends AbstractController
         $mask2 = $this->getParameter('app.maska2');
         $mask3 = $this->getParameter('app.maska3');
 //        $tab = empty($sql2) ? -1 : $tab;
-//        try {
+        try {
             $records1 = $conn->fetchAllAssociative($sql1, [
                 'mask1' => $mask1,
                 'mask2' => $mask2,
                 'mask3' => $mask3,
             ]);
-//        } catch (Exception $e) {
-//            return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
-//        }
+        } catch (Exception $e) {
+            return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+        }
         $callArray = [
             'records1' => $records1,
             'title' => sprintf('%02u - ', $tab) . $title,

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Import1;
+use App\Form\Import1Type;
 use App\Form\PlikDoTabeli1Type;
 use App\Repository\Import1Repository;
 use App\Service\StringConverter;
@@ -99,5 +100,40 @@ final class ImportController extends AbstractController
 //
         }
         return $this->render('import/plikdotabeli.html.twig', ['form' => $form]);
+    }
+
+    #[Route('/import1', name: 'route_imp_import1', methods: ['GET', 'POST'])]
+    public function import1(Import1Repository $import1Repository,
+                            Request           $request): Response
+    {
+        $session = $request->getSession();
+        if (!$session->has('sessionQueryExtra')) $session->set('sessionQueryExtra', 'where 1=1');
+
+        $form = $this->createForm(Import1Type::class, null, [
+            'initialValue' => $session->get('sessionQueryExtra', 'where 1=1')
+        ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+//
+            $session->set('sessionQueryExtra', $form->get('queryExtra')->getData());
+            return $this->render('import/import1.html.twig', [
+                'records1' => $import1Repository->Import1List($session->get('sessionQueryExtra', 'where 1=1')),
+                'sessionQueryExtra' => $session->get('sessionQueryExtra', 'where 1=1'),
+            ]);
+//
+        }
+        return $this->render('import/import.html.twig', ['form' => $form]);
+    }
+
+    #[Route('/import1Use/{iid}', name: 'route_imp_import1Use', methods: ['GET'])]
+    public function import1Use(Connection $conn, int $iid = 0): Response
+    {
+        try {
+            $res = $conn->prepare("update import1 set use = 1 where id = $iid")->executeStatement();
+        } catch (Exception $e) {
+            return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+        }
+        return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
     }
 }

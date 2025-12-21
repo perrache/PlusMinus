@@ -16,10 +16,10 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         ### PLW
-#        bind:
-#            $mask1: '999 999 990"."99'
-#            $mask2: 'YYYY / MM'
-#            $mask3: 'DD-MM-YYYY'
+        bind:
+            $mask1: '%app.maska1%'
+            $mask2: '%app.maska2%'
+            $mask3: '%app.maska3%'
         ### PLW
 
     # makes classes in src/ available to be used as services

@@ -137,26 +137,6 @@ where t.id = :id
 order by m.dat desc, stransaction, m.id desc',
         ],
         21 => [
-            'title' => 'Minus-All',
-            'sql1' => '
-select k.name||\' / \'||t.name stype,
-       r.name stransaction,
-       o.name||\' / \'||a.name saccount,
-       case c.code when \'PLN\' then \'\' else c.code end swal,
-       to_char(m.value, :mask1) nvalue,
-       to_char(m.dat, :mask3) sdata,
-       m.comment scomment
-from minus m
-    join type t on t.id = m.type_id
-    join kind k on k.id = t.kind_id
-    join transaction r on r.id = m.transaction_id
-    join account a on a.id = m.account_id
-    join organization o on o.id = a.organization_id
-    join currency c on c.id = a.currency_id
-order by m.dat desc, m.id desc',
-            'sql2' => '',
-        ],
-        22 => [
             'title' => 'Move-All',
             'sql1' => '
 select oplus.name||\' / \'||aplus.name saccountplus,
@@ -173,6 +153,29 @@ from move m
     join account aminus on aminus.id = m.accminus_id
     join organization ominus on ominus.id = aminus.organization_id
     join currency cminus on cminus.id = aminus.currency_id
+order by m.dat desc, m.id desc',
+            'sql2' => '',
+        ],
+        22 => [
+            'title' => 'Minus-All',
+            'sql1' => '
+select to_char(m.dat, \'YYYY/MM\') smies,
+       k.name skind,
+       k.name||\' / \'||t.name stype,
+       r.name stransaction,
+       o.name||\' / \'||a.name saccount,
+       case c.code when \'PLN\' then \'\' else c.code end swal,
+       to_char(m.value, :mask1) nvalue,
+       to_char(m.dat, :mask3) sdata,
+       m.comment scomment,
+       m.refer srefer
+from minus m
+    join type t on t.id = m.type_id
+    join kind k on k.id = t.kind_id
+    join transaction r on r.id = m.transaction_id
+    join account a on a.id = m.account_id
+    join organization o on o.id = a.organization_id
+    join currency c on c.id = a.currency_id
 order by m.dat desc, m.id desc',
             'sql2' => '',
         ],
@@ -225,9 +228,71 @@ select \'plus\' sign, sum(bo) val, \'0000/00\' data from account
 ) t1
 ) t2
 group by grouping sets ((t2.mies), ())
-order by t2.mies
-',
+order by t2.mies nulls last',
             'sql2' => '',
         ],
     ];
+
+    public function __construct()
+    {
+        $extraRollup = '
+from minus m
+    join type t on t.id = m.type_id
+    join kind k on k.id = t.kind_id
+    join account a on a.id = m.account_id
+    join organization o on o.id = a.organization_id
+';
+        $this->sqlArray[41] = [
+            'title' => 'Minus-mies,kind,type,account',
+            'sql1' => '
+select to_char(m.dat, \'YYYY/MM\') smies,
+       k.name skind,
+       k.name||\' / \'||t.name stype,
+       o.name||\' / \'||a.name saccount,
+       to_char(sum(m.value), :mask1) nvalue
+' . $extraRollup . '
+group by rollup (smies, skind, stype, saccount)
+order by smies nulls last, skind nulls last, stype nulls last, saccount nulls last',
+            'sql2' => '',
+        ];
+        $this->sqlArray[42] = [
+            'title' => 'Minus-mies,account,kind,type',
+            'sql1' => '
+select to_char(m.dat, \'YYYY/MM\') smies,
+       o.name||\' / \'||a.name saccount,
+       k.name skind,
+       k.name||\' / \'||t.name stype,
+       to_char(sum(m.value), :mask1) nvalue
+' . $extraRollup . '
+group by rollup (smies, saccount, skind, stype)
+order by smies nulls last, saccount nulls last, skind nulls last, stype nulls last',
+            'sql2' => '',
+        ];
+        $this->sqlArray[43] = [
+            'title' => 'Minus-kind,type,account,mies',
+            'sql1' => '
+select k.name skind,
+       k.name||\' / \'||t.name stype,
+       o.name||\' / \'||a.name saccount,
+       to_char(m.dat, \'YYYY/MM\') smies,
+       to_char(sum(m.value), :mask1) nvalue
+' . $extraRollup . '
+group by rollup (skind, stype, saccount, smies)
+order by skind nulls last, stype nulls last, saccount nulls last, smies nulls last',
+            'sql2' => '',
+        ];
+        $this->sqlArray[44] = [
+            'title' => 'Minus-account,kind,type,mies',
+            'sql1' => '
+select o.name||\' / \'||a.name saccount,
+       k.name skind,
+       k.name||\' / \'||t.name stype,
+       to_char(m.dat, \'YYYY/MM\') smies,
+       to_char(sum(m.value), :mask1) nvalue
+' . $extraRollup . '
+group by rollup (saccount, skind, stype, smies)
+order by saccount nulls last, skind nulls last, stype nulls last, smies nulls last',
+            'sql2' => '',
+        ];
+    }
 }

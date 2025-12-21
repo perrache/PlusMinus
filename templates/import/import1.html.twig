@@ -1,0 +1,182 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Import1{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        td, th {
+            padding: 6px;
+        }
+
+        td > p {
+            text-align: left;
+            margin: 0;
+            padding: 0
+        }
+
+        td.left {
+            text-align: left;
+        }
+
+        td.center {
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        td.right {
+            text-align: right;
+        }
+
+        div.inside-center {
+            text-align: center;
+            margin: 0;
+            padding: 0
+        }
+
+        div.inside-right {
+            text-align: right;
+            white-space: nowrap;
+            /*font-size: 1.5em;*/
+            margin: 0;
+            padding: 0
+        }
+
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .yellow {
+            color: yellow;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+            cursor: pointer;
+        }
+
+        .tooltiptext {
+            visibility: hidden;
+            width: 300px;
+            background-color: dimgray;
+            color: cyan;
+            text-align: left;
+            border-radius: 6px;
+            padding: 0 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -210px;
+        }
+
+        .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 70%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: dimgray transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="content1">
+        <h1>Import1</h1>
+        {% set cLast = 0 %}
+        {% set cUse = 0 %}
+        {% set cHas = 0 %}
+        {% for record1 in records1 %}
+            {% if record1.lastalias == 1 %}
+                {% set cLast = cLast + 1 %}
+            {% endif %}
+            {% if record1.usealias == 1 %}
+                {% set cUse = cUse + 1 %}
+            {% endif %}
+            {% if record1.has == 'X' %}
+                {% set cHas = cHas + 1 %}
+            {% endif %}
+        {% endfor %}
+        <h3>{{ records1|length }} records, {{ cLast }} last, {{ cUse }} use, {{ cHas }} has</h3>
+        <h3 class="yellow">{{ sessionQueryExtra }}</h3>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Data operacji</th>
+                <th>Data księgowania</th>
+                <th>X</th>
+                <th>Typ operacji</th>
+                <th>Szczegóły operacji</th>
+                <th>Kategoria</th>
+                <th>Kwota</th>
+                <th>Last</th>
+                <th>Use</th>
+                <th>Has</th>
+                <th>&nbsp;</th>
+            </tr>
+            {% for record1 in records1 %}
+                <tr>
+                    <td class="right">{{ record1.idalias }}</td>
+                    <td class="center">{{ record1.valuedatealias }}</td>
+                    <td class="center">{{ record1.postingdatealias }}</td>
+                    <td class="center">
+                        <div class="inside-center red">{{ record1.x }}</div>
+                    </td>
+                    <td class="left">{{ record1.typealias }}</td>
+                    <td class="left">
+                        <p>{{ record1.contractoralias }}</p>
+                        <p>{{ record1.titlealias }}</p>
+                    </td>
+                    <td class="left">{{ record1.categoryalias }}</td>
+                    <td class="right">
+                        {% if record1.value > 0 %}
+                            <div class="inside-right green">{{ record1.valuealias }}</div>
+                        {% elseif record1.value < 0 %}
+                            <div class="inside-right red">{{ record1.valuealias }}</div>
+                        {% else %}
+                            <div class="inside-right">{{ record1.valuealias }}</div>
+                        {% endif %}
+                    </td>
+                    <td class="center">{{ record1.lastalias }}</td>
+                    <td class="center">{{ record1.usealias }}</td>
+                    <td class="center">
+                        {% if record1.has == 'X' %}
+                            <div class="inside-center yellow">
+                                {{ record1.has }}
+                            </div>
+                        {% else %}
+                            <div class="inside-center tooltip">
+                                {{ record1.has }}
+                                <span class="tooltiptext">
+                                    <p>{{ record1.type }}</p>
+                                    <p>{{ record1.account }}</p>
+                                    <p>{{ record1.comment }}</p>
+                                </span>
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if record1.value < 0 and record1.has == 'X' %}
+                            <a href="dupa">import</a>
+                            <a href="/imp/import1useOnly/{{ record1.idalias }}">onlyUse</a>
+                        {% else %}
+                            <a href="/imp/import1useOnly/{{ record1.idalias }}">Use</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
