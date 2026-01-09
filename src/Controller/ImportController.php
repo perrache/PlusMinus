@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Import1;
+use App\Entity\Minus;
 use App\Form\Import1Type;
+use App\Form\MinusType;
 use App\Form\PlikDoTabeli1Type;
+use App\Repository\AccountRepository;
 use App\Repository\Import1Repository;
 use App\Service\StringConverter;
 use Doctrine\DBAL\Connection;
@@ -126,14 +129,53 @@ final class ImportController extends AbstractController
         return $this->render('import/import.html.twig', ['form' => $form]);
     }
 
-    #[Route('/import1Use/{iid}', name: 'route_imp_import1Use', methods: ['GET'])]
-    public function import1Use(Connection $conn, int $iid = 0): Response
+    #[Route('/import1Use/{iid}/{mid}/{mrefer}', name: 'route_imp_import1Use', methods: ['GET'])]
+    public function import1Use(Connection $conn, int $iid = 0, int $mid = 0, string $mrefer = ''): Response
     {
         try {
-            $res = $conn->prepare("update import1 set use = 1 where id = $iid")->executeStatement();
+            if ($iid > 0) $res = $conn->prepare("update import1 set use = 1 where id = $iid")->executeStatement();
+            if ($mid > 0) $res = $conn->prepare("update minus set refer = '$mrefer' where id = $mid")->executeStatement();
         } catch (Exception $e) {
             return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
         }
         return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/new/{iid}', name: 'app_minus_new1', methods: ['GET', 'POST'])]
+    public function new1(Request                $request,
+                         EntityManagerInterface $entityManager,
+                         Connection             $conn,
+                         AccountRepository      $accountRepository,
+                         int                    $iid = 0): Response
+    {
+        if ($iid <= 0) return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+        try {
+            $result = $conn->fetchAllAssociative("select * from import1 where id = $iid");
+        } catch (Exception $e) {
+            return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+        }
+        $minu = new Minus();
+        $minu->setValue(-$result[0]['value']);
+        $minu->setDat(new \DateTime($result[0]['valuedate']));
+        $minu->setRefer($result[0]['refer']);
+        $minu->setAccount($accountRepository->findOneBy(['import' => 1]));
+        $form = $this->createForm(MinusType::class, $minu);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+//
+            $entityManager->persist($minu);
+            $entityManager->flush();
+            try {
+                $res = $conn->prepare("update import1 set use = 1 where id = $iid")->executeStatement();
+            } catch (Exception $e) {
+                return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+            }
+            return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
+//
+        }
+        return $this->render('minus/new.html.twig', [
+            'minu' => $minu,
+            'form' => $form,
+        ]);
     }
 }

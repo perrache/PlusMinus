@@ -45,6 +45,8 @@ select i.id idAlias,
        i.last lastAlias,
        i.use useAlias,
        case when m.id is null then 'X' else 'O' end has,
+       i.refer referAlias,
+       m.id idM,
        k.name||' / '||t.name type,
        o.name||' / '||a.name account,
        m.comment

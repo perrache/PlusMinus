@@ -159,20 +159,28 @@
                         {% else %}
                             <div class="inside-center tooltip">
                                 {{ record1.has }}
-                                <span class="tooltiptext">
-                                    <p>{{ record1.type }}</p>
-                                    <p>{{ record1.account }}</p>
-                                    <p>{{ record1.comment }}</p>
-                                </span>
+                                <div class="tooltiptext">
+                                    <h5>{{ record1.type }}</h5>
+                                    <h5>{{ record1.account }}</h5>
+                                    <h5>{{ record1.comment }}</h5>
+                                </div>
                             </div>
                         {% endif %}
                     </td>
                     <td>
-                        {% if record1.value < 0 and record1.has == 'X' %}
-                            <a href="dupa">import</a>
-                            <a href="/imp/import1useOnly/{{ record1.idalias }}">onlyUse</a>
-                        {% else %}
-                            <a href="/imp/import1useOnly/{{ record1.idalias }}">Use</a>
+                        {% if record1.has == 'X' %}
+                            {% if record1.value < 0 %}
+                                {% if record1.usealias == 0 %}
+                                    <a href="{{ path('app_minus_new1', {'iid': record1.idalias}) }}">import</a>
+                                {% endif %}
+                                <a href="{{ path('route_imp_import1Use', {'iid': record1.idalias}) }}">onlyUse</a>
+                            {% endif %}
+                            {% if record1.value > 0 %}
+                                <a href="{{ path('route_imp_import1Use', {'iid': record1.idalias}) }}">onlyUse</a>
+                            {% endif %}
+                        {% endif %}
+                        {% if record1.has == 'O' %}
+                            <a href="{{ path('route_imp_import1Use', {'iid': record1.idalias, 'mid': record1.idm, 'mrefer': record1.referalias}) }}">Use</a>
                         {% endif %}
                     </td>
                 </tr>
