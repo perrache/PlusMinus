@@ -7,6 +7,15 @@
         <h1>{{ title }}</h1>
         {% if records1.(0) is defined %}
             <h3>{{ records1|length }} records</h3>
+            {% if sql3 == 'mies' %}
+                {% set iter = '' %}
+                {% for record1 in records1 %}
+                    {% if record1.smies != iter %}
+                        <div class="new"><a href="dupa">{{ record1.smies }}</a></div>
+                        {% set iter = record1.smies %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
             <table>
                 <tr>
                     {% for col in records1.(0)|keys %}

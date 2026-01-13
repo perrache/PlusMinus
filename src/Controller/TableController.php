@@ -18,6 +18,7 @@ final class TableController extends AbstractController
         $title = $sqlService->sqlArray[$tab]['title'];
         $sql1 = $sqlService->sqlArray[$tab]['sql1'];
         $sql2 = $sqlService->sqlArray[$tab]['sql2'];
+        $sql3 = $sqlService->sqlArray[$tab]['sql3'];
         $mask1 = $this->getParameter('app.maska1');
         $mask2 = $this->getParameter('app.maska2');
         $mask3 = $this->getParameter('app.maska3');
@@ -36,6 +37,7 @@ final class TableController extends AbstractController
             'title' => sprintf('%02u - ', $tab) . $title,
             'tab' => empty($sql2) ? -1 : $tab,
             'id' => $id,
+            'sql3' => $sql3,
         ];
         if ($id > 0) {
             try {

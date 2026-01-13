@@ -61,15 +61,15 @@ from import1 i
 eof;
 
         $sql = $sqlMain . ' ' . $queryExtra;
-//        try {
-        $res = $conn->executeQuery($sql, [
-            'mask1' => $this->mask1,
-            'mask2' => $this->mask2,
-            'mask3' => $this->mask3,
-        ]);
-//        } catch (Exception $e) {
-//            return [];
-//        }
+        try {
+            $res = $conn->executeQuery($sql, [
+                'mask1' => $this->mask1,
+                'mask2' => $this->mask2,
+                'mask3' => $this->mask3,
+            ]);
+        } catch (Exception $e) {
+            return [];
+        }
         try {
             return $res->fetchAllAssociative();
         } catch (Exception $e) {

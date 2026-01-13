@@ -87,8 +87,10 @@ td {
 /*}*/
 
 div.new {
-    margin-top: 10px;
+    display: inline-block;
+    margin-top: 5px;
     margin-bottom: 10px;
+    margin-right: 10px;
 }
 
 /*ul {*/
