@@ -6,11 +6,35 @@ use App\Service\SqlService;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class TableController extends AbstractController
 {
+    #[Route('/menu/{tab}', name: 'route_menu', requirements: ['tab' => '\d+'], methods: ['GET'])]
+    public function route_menu(SqlService $sqlService, Request $request, int $tab = 0): Response
+    {
+        $session = $request->getSession();
+        if (!$session->has('menu10')) $session->set('menu10', '0');
+        if (!$session->has('menu20')) $session->set('menu20', '0');
+        if (!$session->has('menu30')) $session->set('menu30', '0');
+        if (!$session->has('menu40')) $session->set('menu40', '0');
+        if (!$session->has('menu50')) $session->set('menu50', '0');
+        if ($tab <= 0) return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+        if ($session->get("menu{$tab}0", '0') === '0') {
+            $session->set('menu10', '0');
+            $session->set('menu20', '0');
+            $session->set('menu30', '0');
+            $session->set('menu40', '0');
+            $session->set('menu50', '0');
+            $session->set("menu{$tab}0", '1');
+        } elseif ($session->get("menu{$tab}0", '0') === '1') {
+            $session->set("menu{$tab}0", '0');
+        }
+        return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route('/sql/{tab}/{id}', name: 'route_sql', requirements: ['tab' => '\d+', 'id' => '\d+'], methods: ['GET'])]
     public function sql(Connection $conn, SqlService $sqlService, int $tab = 0, int $id = 0): Response
     {

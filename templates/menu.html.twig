@@ -15,18 +15,21 @@
 {{ include('menu1.html.twig', {needPath: 'route_imp_plikdotabeli1', aElement: 'PlikDoTabeli1'}) }}
 {{ include('menu1.html.twig', {needPath: 'route_imp_import1', aElement: 'Import1'}) }}
 <div>======</div>
+{% set close = '0' %}
 {% for key, mArray in sqlService.sqlArray %}
-    {{ include('menu2.html.twig', {curTab: key, aElement: mArray['title']}) }}
+    {% if (key % 10 == 0) %}
+        {% set close = '0' %}
+        {% if app.session.get("menu#{key}") is defined %}
+            {% if app.session.get("menu#{key}") == '0' %}
+                {% set close = '1' %}
+            {% endif %}
+        {% endif %}
+        <div>
+            <a href="{{ path('route_menu') }}/{{ key / 10 }}">{{ '%02u'|format(key) }}</a>
+        </div>
+    {% else %}
+        {% if close == '0' %}
+            {{ include('menu2.html.twig', {curTab: key, aElement: mArray['title']}) }}
+        {% endif %}
+    {% endif %}
 {% endfor %}
-{# {{ include('menu2.html.twig', {curTab: '2', aElement: 'Types(+minus)'}) }} #}
-{# {{ include('menu2.html.twig', {curTab: '3', aElement: 'Accounts'}) }} #}
-{# {{ include('menu2.html.twig', {curTab: '4', aElement: 'Transactions(+minus)'}) }} #}
-{# {{ include('menu2.html.twig', {curTab: '5', aElement: 'Kinds / Types'}) }} #}
-
-{# <div><a href="{{ path('route_sql03') }}">03 - (+-) Control</a></div> #}
-{# <div><a href="{{ path('route_sql04') }}">04 - TransactionMinus</a></div> #}
-{# <div><a href="{{ path('route_sql05a') }}">05a - Comment / comment</a></div> #}
-{# <div><a href="{{ path('route_sql05b') }}">05b - Comment / quantity</a></div> #}
-{# <div><a href="{{ path('route_sql06') }}">06 - Saldo</a></div> #}
-{# <div><a href="{{ path('route_sql07') }}">07 - PlusMinusMax</a></div> #}
-{# <div><a href="{{ path('route_sql08') }}">08 - Bilans</a></div> #}

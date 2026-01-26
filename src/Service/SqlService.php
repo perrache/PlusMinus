@@ -5,7 +5,13 @@ namespace App\Service;
 class SqlService
 {
     public array $sqlArray = [
-        1 => [
+        10 => [
+            'title' => '',
+            'sql1' => '',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        11 => [
             'title' => 'Dictionary-Kind-Type',
             'sql1' => '
 select k.name skind, k.id sid
@@ -18,7 +24,7 @@ where t.kind_id = :id
 order by stype',
             'sql3' => '',
         ],
-        2 => [
+        12 => [
             'title' => 'Dictionary-Organization-Account',
             'sql1' => '
 select o.name sorganization, o.id sid
@@ -32,7 +38,13 @@ where a.organization_id = :id
 order by saccount',
             'sql3' => '',
         ],
-        11 => [
+        20 => [
+            'title' => '',
+            'sql1' => '',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        21 => [
             'title' => 'Turnover-Kinds',
             'sql1' => '
 select k.name skind, k.id sid, to_char(sum(m.value), :mask1) nsuma, count(*) nile
@@ -50,7 +62,7 @@ where t.kind_id = :id
 order by m.dat desc, stype, m.id desc',
             'sql3' => '',
         ],
-        12 => [
+        22 => [
             'title' => 'Turnover-Types',
             'sql1' => '
 select k.name||\' / \'||t.name stype, t.id sid, to_char(sum(m.value), :mask1) nsuma, count(*) nile
@@ -68,7 +80,7 @@ where m.type_id = :id
 order by m.dat desc, stype, m.id desc',
             'sql3' => '',
         ],
-        13 => [
+        23 => [
             'title' => 'Turnover-Accounts',
             'sql1' => '
 select tab.oname||\' / \'||tab.aname saccount,
@@ -126,7 +138,7 @@ where pm.accminus_id = :id
 order by xdat desc, stype',
             'sql3' => '',
         ],
-        14 => [
+        24 => [
             'title' => 'Turnover-Transactions',
             'sql1' => '
 select t.name stransaction, t.id sid, to_char(sum(m.value), :mask1) nsuma, count(*) nile
@@ -142,7 +154,13 @@ where t.id = :id
 order by m.dat desc, stransaction, m.id desc',
             'sql3' => '',
         ],
-        21 => [
+        30 => [
+            'title' => '',
+            'sql1' => '',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        31 => [
             'title' => 'Move-All',
             'sql1' => '
 select oplus.name||\' / \'||aplus.name saccountplus,
@@ -163,7 +181,7 @@ order by m.dat desc, m.id desc',
             'sql2' => '',
             'sql3' => '',
         ],
-        22 => [
+        32 => [
             'title' => 'Minus-All',
             'sql1' => '
 select to_char(m.dat, \'YYYY/MM\') smies,
@@ -187,7 +205,7 @@ order by m.dat desc, m.id desc',
             'sql2' => '',
             'sql3' => 'mies',
         ],
-        23 => [
+        33 => [
             'title' => 'Minus-Comments-Sum',
             'sql1' => '
 select m.comment scomment, to_char(sum(m.value), :mask1) nsuma, count(*) nile
@@ -197,7 +215,7 @@ order by scomment',
             'sql2' => '',
             'sql3' => '',
         ],
-        24 => [
+        34 => [
             'title' => 'Minus-Comments-Order',
             'sql1' => '
 select k.name||\' / \'||t.name stype,
@@ -218,7 +236,36 @@ order by scomment, m.dat desc, m.id desc',
             'sql2' => '',
             'sql3' => '',
         ],
-        31 => [
+        35 => [
+            'title' => 'Minus-Mies-Value-Order',
+            'sql1' => '
+select to_char(m.dat, \'YYYY/MM\') smies,
+       k.name skind,
+       k.name||\' / \'||t.name stype,
+       r.name stransaction,
+       o.name||\' / \'||a.name saccount,
+       case c.code when \'PLN\' then \'\' else c.code end swal,
+       to_char(m.value, :mask1) nvalue,
+       to_char(m.dat, :mask3) sdata,
+       m.comment scomment
+from minus m
+    join type t on t.id = m.type_id
+    join kind k on k.id = t.kind_id
+    join transaction r on r.id = m.transaction_id
+    join account a on a.id = m.account_id
+    join organization o on o.id = a.organization_id
+    join currency c on c.id = a.currency_id
+order by smies desc, m.value desc',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        40 => [
+            'title' => '',
+            'sql1' => '',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        41 => [
             'title' => 'Bilans',
             'sql1' => '
 select t2.mies smies,
@@ -242,7 +289,13 @@ order by t2.mies nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
-        41 => [
+        50 => [
+            'title' => '',
+            'sql1' => '',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        51 => [
             'title' => 'Minus-mies,kind,type,account',
             'sql1' => '
 select to_char(m.dat, \'YYYY/MM\') smies,
@@ -256,11 +309,11 @@ from minus m
     join account a on a.id = m.account_id
     join organization o on o.id = a.organization_id
 group by rollup (smies, skind, stype, saccount)
-order by smies nulls last, skind nulls last, stype nulls last, saccount nulls last',
+order by smies desc nulls last, skind nulls last, stype nulls last, saccount nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
-        42 => [
+        52 => [
             'title' => 'Minus-mies,account,kind,type',
             'sql1' => '
 select to_char(m.dat, \'YYYY/MM\') smies,
@@ -274,11 +327,11 @@ from minus m
     join account a on a.id = m.account_id
     join organization o on o.id = a.organization_id
 group by rollup (smies, saccount, skind, stype)
-order by smies nulls last, saccount nulls last, skind nulls last, stype nulls last',
+order by smies desc nulls last, saccount nulls last, skind nulls last, stype nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
-        43 => [
+        53 => [
             'title' => 'Minus-kind,type,account,mies',
             'sql1' => '
 select k.name skind,
@@ -292,11 +345,11 @@ from minus m
     join account a on a.id = m.account_id
     join organization o on o.id = a.organization_id
 group by rollup (skind, stype, saccount, smies)
-order by skind nulls last, stype nulls last, saccount nulls last, smies nulls last',
+order by skind nulls last, stype nulls last, saccount nulls last, smies desc nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
-        44 => [
+        54 => [
             'title' => 'Minus-account,kind,type,mies',
             'sql1' => '
 select o.name||\' / \'||a.name saccount,
@@ -310,7 +363,44 @@ from minus m
     join account a on a.id = m.account_id
     join organization o on o.id = a.organization_id
 group by rollup (saccount, skind, stype, smies)
-order by saccount nulls last, skind nulls last, stype nulls last, smies nulls last',
+order by saccount nulls last, skind nulls last, stype nulls last, smies desc nulls last',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        55 => [
+            'title' => 'Minus-kind,mies',
+            'sql1' => '
+select qkind skind,
+       qmies smies,
+       qvalue nvalue,
+       round(qpart * 100) "npart%",
+       to_char(round(qperday / public.ndayinmonth(qmies)), :mask1) "nper/day"
+from (
+select k.name qkind,
+       to_char(m.dat, \'YYYY/MM\') qmies,
+       to_char(sum(m.value), :mask1) qvalue,
+       sum(m.value)::numeric / last_value(sum(m.value)) over (partition by k.name) qpart,
+       sum(m.value)::numeric qperday
+from minus m
+    join type t on t.id = m.type_id
+    join kind k on k.id = t.kind_id
+group by rollup (qkind, qmies)
+) q
+order by skind nulls last, smies desc nulls last',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        56 => [
+            'title' => 'Minus-mies,kind',
+            'sql1' => '
+select to_char(m.dat, \'YYYY/MM\') smies,
+       k.name skind,
+       to_char(sum(m.value), :mask1) nvalue
+from minus m
+    join type t on t.id = m.type_id
+    join kind k on k.id = t.kind_id
+group by rollup (smies, skind)
+order by smies desc nulls last, skind nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
