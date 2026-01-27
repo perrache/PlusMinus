@@ -3,15 +3,9 @@
 {% block title %}Plus Minus Application{% endblock %}
 
 {% block body %}
-    <div class="content1">
+    <div class="col">
         <h1>System PlusMinus</h1>
         <h4>Piotr Lewandowski</h4>
         <h4>{{ currClock }}</h4>
-        <img src="PM.png" alt="struktura bazy" style="width: 950px; height: 750px;" usemap="#pm">
-        <map name="pm">
-            <area shape="rect" coords="104,48,230,174" alt="Kind" href="{{ path('app_kind_index') }}">
-            <area shape="rect" coords="104,286,230,412" alt="Type" href="{{ path('app_type_index') }}">
-            <area shape="rect" coords="300,286,426,412" alt="Transaction" href="{{ path('app_transaction_index') }}">
-        </map>
     </div>
 {% endblock %}
