@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ move.id }}</td>
                 <td>{{ move.value }}</td>
-                <td>{{ move.dat ? move.dat|date('Y-m-d') : '' }}</td>
+                <td>{{ move.dat ? move.dat|date('d-m-Y') : '' }}</td>
                 <td>{{ move.comment }}</td>
                 <td>
                     <a href="{{ path('app_move_show', {'id': move.id}) }}">show</a>

@@ -6,19 +6,24 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+{#    <link href="style.css" rel="stylesheet">#}
     {% block stylesheets %}
     {% endblock %}
     {% block javascripts %}
-        {#        {% block importmap %}{{ importmap('app') }}{% endblock %} #}
     {% endblock %}
 </head>
 <body>
 {% set curPath = app.current_route %}
-{% set rawDiv1 = '<div class="col">' %}
+
+{% set rawTable = 'table table-sm table-hover align-middle table-bordered border-secondary' %}
+{% set rawA = 'btn btn-primary btn-sm' %}
+
+{% set rawDiv1 = '<div class="col-xxl-auto">' %}
 {% set rawDiv2 = '</div>' %}
-<div class="container text-center">
+
+<div class="container">
     <div class="row">
-{#        {% include('menu.html.twig') %}#}
+        {#        {% include('menu.html.twig') %} #}
         {% if curPath|slice(0,4) == 'app_' %}   {# ekrany CRUD #}
             {{ rawDiv1|raw }}
         {% endif %}

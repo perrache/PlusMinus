@@ -4,9 +4,9 @@
 
 {% block body %}
     <h1>Minus index</h1>
-    <div><a href="{{ path('app_minus_new') }}">Create new</a></div>
+    <a class="{{ rawA|raw }}" href="{{ path('app_minus_new') }}">Create new</a>
 
-    <table class="table table-hover table-bordered">
+    <table class="{{ rawTable|raw }}">
         <thead>
         <tr>
             <th>Id</th>
@@ -21,11 +21,11 @@
             <tr>
                 <td>{{ minu.id }}</td>
                 <td>{{ minu.value }}</td>
-                <td>{{ minu.dat ? minu.dat|date('Y-m-d') : '' }}</td>
+                <td>{{ minu.dat ? minu.dat|date('d-m-Y') : '' }}</td>
                 <td>{{ minu.comment }}</td>
                 <td>
-                    <a href="{{ path('app_minus_show', {'id': minu.id}) }}">show</a>
-                    <a href="{{ path('app_minus_edit', {'id': minu.id}) }}">edit</a>
+                    <a class="{{ rawA|raw }}" href="{{ path('app_minus_show', {'id': minu.id}) }}">show</a>
+                    <a class="{{ rawA|raw }}" href="{{ path('app_minus_edit', {'id': minu.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -36,5 +36,5 @@
         </tbody>
     </table>
 
-    <div><a href="{{ path('app_minus_new') }}">Create new</a></div>
+    <a class="{{ rawA|raw }}" href="{{ path('app_minus_new') }}">Create new</a>
 {% endblock %}

@@ -20,12 +20,21 @@ class MinusType extends AbstractType
     {
         $builder
             ->add('value', IntegerType::class, [
-                'attr' => ['autofocus' => true],
+                'label' => 'Value',
+                'attr' => ['autofocus' => true, 'placeholder' => 'Value'],
+                'row_attr' => ['class' => 'form-floating'],
             ])
             ->add('dat', null, [
+                'label' => 'Data',
+                'attr' => ['placeholder' => 'Data'],
+                'row_attr' => ['class' => 'form-floating'],
                 'widget' => 'single_text',
             ])
-            ->add('comment')
+            ->add('comment', null, [
+                'label' => 'Comment',
+                'attr' => ['placeholder' => 'Comment'],
+                'row_attr' => ['class' => 'form-floating'],
+            ])
             ->add('type', EntityType::class, [
                 'class' => Type::class,
                 'choice_label' => function (Type $type): string {
