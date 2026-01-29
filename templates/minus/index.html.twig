@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ minu.id }}</td>
                 <td>{{ minu.value }}</td>
-                <td>{{ minu.dat ? minu.dat|date('Y-m-d') : '' }}</td>
+                <td>{{ minu.dat ? minu.dat|date('d-m-Y') : '' }}</td>
                 <td>{{ minu.comment }}</td>
                 <td>
                     <a href="{{ path('app_minus_show', {'id': minu.id}) }}">show</a>

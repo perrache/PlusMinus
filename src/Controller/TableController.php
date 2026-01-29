@@ -15,6 +15,10 @@ final class TableController extends AbstractController
     #[Route('/menu/{tab}', name: 'route_menu', requirements: ['tab' => '\d+'], methods: ['GET'])]
     public function route_menu(SqlService $sqlService, Request $request, int $tab = 0): Response
     {
+//        #########################################
+//        zwijanie / rozwijanie węzłów menu
+//        NIEUŻYWANE
+//        #########################################
         $session = $request->getSession();
         if (!$session->has('menu10')) $session->set('menu10', '0');
         if (!$session->has('menu20')) $session->set('menu20', '0');

@@ -38,6 +38,7 @@ div.menu {
     top: 0;
     grid-column: 1 / 2;
     align-self: start;
+    font-size: 12px;
 }
 
 /*Layout - lewy kontent*/

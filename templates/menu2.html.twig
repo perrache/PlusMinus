@@ -9,6 +9,6 @@
     {% endif %}
 
     <div>
-        &nbsp; <a href="{{ path('route_sql') }}/{{ curTab }}"{{ extra|raw }}>{{ '%02u - '|format(curTab) }}{{ aElement }}</a>
+        <a href="{{ path('route_sql') }}/{{ curTab }}"{{ extra|raw }}>{{ '%02u - '|format(curTab) }}{{ aElement }}</a>
     </div>
 {% endif %}

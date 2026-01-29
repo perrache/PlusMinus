@@ -8,13 +8,14 @@
     {% block stylesheets %}
     {% endblock %}
     {% block javascripts %}
-        {#        {% block importmap %}{{ importmap('app') }}{% endblock %} #}
     {% endblock %}
 </head>
 <body>
 {% set curPath = app.current_route %}
+
 {% set rawDiv1 = '<div class="content1">' %}
 {% set rawDiv2 = '</div>' %}
+
 <div class="container">
     <div class="menu">
         {% include('menu.html.twig') %}
