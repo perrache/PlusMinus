@@ -259,6 +259,34 @@ order by smies desc, m.value desc',
             'sql2' => '',
             'sql3' => '',
         ],
+        36 => [
+            'title' => 'Minus-Import1-Errors',
+            'sql1' => '
+select -sum(value) nvalue,
+       \'i\' sx
+from import1
+where value<0
+and id not in (315, 287, 363, 486, 511, 512)
+and valuedate < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
+union all
+select sum(value) nvalue,
+       \'m\' sx
+from
+(
+select value
+from minus
+where account_id=1
+and id not in (62, 125, 196, 239, 240)
+and dat < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
+union all
+select value
+from move
+where accminus_id=1
+and dat < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
+) t',
+            'sql2' => '',
+            'sql3' => '',
+        ],
         40 => [
             'title' => '',
             'sql1' => '',
