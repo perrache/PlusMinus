@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
-    {#    <link rel="stylesheet" type="text/css" href="http://localhost:8088/main.css?v={{ 'now'|date('YmdHis') }}"> #}
-    <link rel="stylesheet" type="text/css" href="/style.css?v={{ 'now'|date('YmdHis') }}">
+    <link rel="stylesheet" type="text/css"
+          href="http://localhost:8080/externalCss/style.css?v={{ 'now'|date('YmdHis') }}">
+    {#    <link rel="stylesheet" type="text/css" href="/style.css?v={{ 'now'|date('YmdHis') }}"> #}
     {% block stylesheets %}
     {% endblock %}
     {% block javascripts %}

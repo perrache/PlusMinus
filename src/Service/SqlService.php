@@ -266,7 +266,7 @@ select -sum(value) nvalue,
        \'i\' sx
 from import1
 where value<0
-and id not in (315, 287, 363, 486, 511, 512)
+and id not in (315, 287, 363, 486, 511, 512, 534, 537, 538)
 and valuedate < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
 union all
 select sum(value) nvalue,
