@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Saldo index{% endblock %}
+
+{% block body %}
+    <h1>Saldo index</h1>
+    <div class="new"><a href="{{ path('app_saldo_new') }}">Create new</a></div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Value</th>
+            <th>Dat</th>
+            <th>Curid</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for saldo in saldos %}
+            <tr>
+                <td>{{ saldo.id }}</td>
+                <td>{{ saldo.value }}</td>
+                <td>{{ saldo.dat ? saldo.dat|date('d-m-Y') : '' }}</td>
+                <td>{{ saldo.curid }}</td>
+                <td>
+                    <a href="{{ path('app_saldo_show', {'id': saldo.id}) }}">show</a>
+                    <a href="{{ path('app_saldo_edit', {'id': saldo.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="new"><a href="{{ path('app_saldo_new') }}">Create new</a></div>
+{% endblock %}

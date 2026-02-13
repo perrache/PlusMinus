@@ -287,6 +287,22 @@ and dat < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
             'sql2' => '',
             'sql3' => '',
         ],
+        37 => [
+            'title' => 'Saldo-All',
+            'sql1' => '
+select o.name||\' / \'||a.name saccount,
+       case c.code when \'PLN\' then \'\' else c.code end swal,
+       to_char(s.value, :mask1) nvalue,
+       to_char(s.dat, :mask3) sdata,
+       s.curid ncurid
+from saldo s
+    join account a on a.id = s.account_id
+    join organization o on o.id = a.organization_id
+    join currency c on c.id = a.currency_id
+order by o.name, a.name, s.dat desc, s.id desc',
+            'sql2' => '',
+            'sql3' => '',
+        ],
         40 => [
             'title' => '',
             'sql1' => '',
