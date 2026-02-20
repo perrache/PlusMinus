@@ -92,7 +92,7 @@ final class ImportController extends AbstractController
                             $entityManager->flush();
                         } else {
                             $rowCount2 += 1;
-                            $logs[] = 'JUŻ ISTNIEJĄCY: ' . $fileRow[7];
+//                            $logs[] = 'JUŻ ISTNIEJĄCY: ' . $fileRow[7];
                         }
                     }
                     $logs[] = 'nazwa pliku: ' . $file;
@@ -110,10 +110,10 @@ final class ImportController extends AbstractController
                             Request           $request): Response
     {
         $session = $request->getSession();
-        if (!$session->has('sessionQueryExtra')) $session->set('sessionQueryExtra', 'where 1=1');
+        if (!$session->has('sessionQueryExtra')) $session->set('sessionQueryExtra', 'where i.use=0 order by i.valuedate desc, i.id');
 
         $form = $this->createForm(Import1Type::class, null, [
-            'initialValue' => $session->get('sessionQueryExtra', 'where 1=1')
+            'initialValue' => $session->get('sessionQueryExtra', 'where i.use=0 order by i.valuedate desc, i.id')
         ]);
 
         $form->handleRequest($request);
@@ -121,8 +121,8 @@ final class ImportController extends AbstractController
 //
             $session->set('sessionQueryExtra', $form->get('queryExtra')->getData());
             return $this->render('import/import1.html.twig', [
-                'records1' => $import1Repository->Import1List($session->get('sessionQueryExtra', 'where 1=1')),
-                'sessionQueryExtra' => $session->get('sessionQueryExtra', 'where 1=1'),
+                'records1' => $import1Repository->Import1List($session->get('sessionQueryExtra', 'where i.use=0 order by i.valuedate desc, i.id')),
+                'sessionQueryExtra' => $session->get('sessionQueryExtra', 'where i.use=0 order by i.valuedate desc, i.id'),
             ]);
 //
         }
