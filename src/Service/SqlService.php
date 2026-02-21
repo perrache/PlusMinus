@@ -303,6 +303,57 @@ order by o.name, a.name, s.dat desc, s.id desc',
             'sql2' => '',
             'sql3' => '',
         ],
+        38 => [
+            'title' => 'Saldo-Accounts',
+            'sql1' => '
+select tab.oname||\' / \'||tab.aname saccount,
+       tab.id sid,
+       case c.code when \'PLN\' then \'\' else c.code end swal,
+       to_char(sum(tab.bo), :mask1) nbo,
+       to_char(sum(tab.val), :mask1) nsaldo,
+       to_char(sum(tab.val+tab.lt), :mask1) ndost
+from
+    (select o.name oname, a.name aname, a.id, a.bo, a.bo val, a.lt, a.currency_id
+     from account a
+         join organization o on o.id = a.organization_id
+     union all
+     select o.name oname, a.name aname, a.id, 0 bo, -m.value val, 0 lt, a.currency_id
+     from minus m
+         join account a on a.id = m.account_id
+         join organization o on o.id = a.organization_id
+     union all
+     select o.name oname, a.name aname, a.id, 0 bo, p.value val, 0 lt, a.currency_id
+     from plus p
+         join account a on a.id = p.account_id
+         join organization o on o.id = a.organization_id
+     union all
+     select o.name oname, a.name aname, a.id, 0 bo, -pm.value val, 0 lt, a.currency_id
+     from move pm
+         join account a on a.id = pm.accminus_id
+         join organization o on o.id = a.organization_id
+     union all
+     select o.name oname, a.name aname, a.id, 0 bo, pm.value val, 0 lt, a.currency_id
+     from move pm
+         join account a on a.id = pm.accplus_id
+         join organization o on o.id = a.organization_id
+     ) tab
+        join currency c on c.id = tab.currency_id
+group by tab.oname||\' / \'||tab.aname, tab.id, c.code
+order by saccount',
+            'sql2' => '
+select o.name||\' / \'||a.name saccount,
+       case c.code when \'PLN\' then \'\' else c.code end swal,
+       to_char(s.value, :mask1) nvalue,
+       to_char(s.dat, :mask3) sdata,
+       s.curid ncurid
+from saldo s
+    join account a on a.id = s.account_id
+    join organization o on o.id = a.organization_id
+    join currency c on c.id = a.currency_id
+where s.account_id = :id
+order by o.name, a.name, s.dat desc, s.id desc',
+            'sql3' => '',
+        ],
         40 => [
             'title' => '',
             'sql1' => '',

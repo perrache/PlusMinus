@@ -1,5 +1,6 @@
 {% set curPath = app.current_route %}
 {{ include('menu1.html.twig', {needPath: 'route_root', aElement: 'PlusMinus'}) }}
+{{ include('menu1.html.twig', {needPath: 'route_root_png', aElement: 'PlusMinusPng'}) }}
 <div>======</div>
 {{ include('menu1.html.twig', {needPath: 'app_kind_index', aElement: 'Kind'}) }}
 {{ include('menu1.html.twig', {needPath: 'app_type_index', aElement: 'Type'}) }}
@@ -16,21 +17,3 @@
 {{ include('menu1.html.twig', {needPath: 'route_imp_plikdotabeli1', aElement: 'PlikDoTabeli1'}) }}
 {{ include('menu1.html.twig', {needPath: 'route_imp_import1', aElement: 'Import1'}) }}
 <div>======</div>
-{% set close = '0' %}
-{% for key, mArray in sqlService.sqlArray %}
-    {% if (key % 10 == 0) %}
-        {% set close = '0' %}
-        {#        {% if app.session.get("menu#{key}") is defined %} #}
-        {#            {% if app.session.get("menu#{key}") == '0' %} #}
-        {#                {% set close = '1' %} #}
-        {#            {% endif %} #}
-        {#        {% endif %} #}
-        {#        <div> #}
-        {#            <a href="{{ path('route_menu') }}/{{ key / 10 }}">{{ '%02u'|format(key) }}</a> #}
-        {#        </div> #}
-    {% else %}
-        {#        {% if close == '0' %} #}
-        {{ include('menu2.html.twig', {curTab: key, aElement: mArray['title']}) }}
-        {#        {% endif %} #}
-    {% endif %}
-{% endfor %}

@@ -7,11 +7,23 @@
         <h1>System PlusMinus</h1>
         <h4>Piotr Lewandowski</h4>
         <h4>{{ currClock }}</h4>
-        <img src="PM.png" alt="struktura bazy" style="width: 1000px; height: 750px;" usemap="#pm">
-        <map name="pm">
-            <area shape="rect" coords="104,48,230,174" alt="Kind" href="{{ path('app_kind_index') }}">
-            <area shape="rect" coords="104,286,230,412" alt="Type" href="{{ path('app_type_index') }}">
-            <area shape="rect" coords="300,286,426,412" alt="Transaction" href="{{ path('app_transaction_index') }}">
-        </map>
+        {% set close = '0' %}
+        {% for key, mArray in sqlService.sqlArray %}
+            {% if (key % 10 == 0) %}
+                {% set close = '0' %}
+                {#        {% if app.session.get("menu#{key}") is defined %} #}
+                {#            {% if app.session.get("menu#{key}") == '0' %} #}
+                {#                {% set close = '1' %} #}
+                {#            {% endif %} #}
+                {#        {% endif %} #}
+                {#        <div> #}
+                {#            <a href="{{ path('route_menu') }}/{{ key / 10 }}">{{ '%02u'|format(key) }}</a> #}
+                {#        </div> #}
+            {% else %}
+                {#        {% if close == '0' %} #}
+                {{ include('menu2.html.twig', {curTab: key, aElement: mArray['title']}) }}
+                {#        {% endif %} #}
+            {% endif %}
+        {% endfor %}
     </div>
 {% endblock %}

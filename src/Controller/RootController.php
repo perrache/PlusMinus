@@ -17,4 +17,13 @@ final class RootController extends AbstractController
             'currClock' => $currClock,
         ]);
     }
+
+    #[Route('/png', name: 'route_root_png', methods: ['GET'])]
+    public function indexpng(ClockInterface $clock): Response
+    {
+        $currClock = $clock->withTimeZone('Europe/Warsaw')->now()->format('d-m-Y H:i:s');
+        return $this->render('root/indexpng.html.twig', [
+            'currClock' => $currClock,
+        ]);
+    }
 }
