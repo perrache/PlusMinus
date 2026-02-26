@@ -34,5 +34,7 @@
 
     <a href="{{ path('app_account_edit', {'id': account.id}) }}">edit</a>
 
+    <a href="{{ path('app_saldo_save', {'id': account.id}) }}">Saldo</a>
+
     {{ include('account/_delete_form.html.twig') }}
 {% endblock %}
