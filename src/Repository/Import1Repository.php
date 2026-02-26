@@ -27,7 +27,7 @@ class Import1Repository extends ServiceEntityRepository
         $this->mask3 = $mask3;
     }
 
-    public function Import1List(string $queryExtra = 'where i.use=0 order by i.valuedate desc, i.id'): array
+    public function Import1List(string $queryExtra = 'and i.use=0 order by i.valuedate desc, i.id'): array
     {
         $conn = $this->getEntityManager()->getConnection();
 
@@ -58,6 +58,7 @@ from import1 i
     left join account a on a.id = m.account_id
     left join organization o on o.id = a.organization_id
     left join currency c on c.id = a.currency_id
+where c.code = 'PLN'
 eof;
 
         $sql = $sqlMain . ' ' . $queryExtra;

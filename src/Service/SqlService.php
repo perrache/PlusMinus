@@ -45,38 +45,60 @@ order by saccount',
             'sql3' => '',
         ],
         21 => [
-            'title' => 'Turnover-Kinds',
+            'title' => 'Turnover-Kinds(PLN)',
             'sql1' => '
-select k.name skind, k.id sid, to_char(sum(m.value), :mask1) nsuma, count(*) nile
+select k.name skind,
+       k.id sid,
+       to_char(sum(m.value), :mask1) nsuma,
+       count(*) nile
 from minus m
     join type t on t.id = m.type_id
     join kind k on k.id = t.kind_id
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 group by k.name, k.id
 order by skind',
             'sql2' => '
-select k.name||\' / \'||t.name stype, to_char(m.value, :mask1) nvalue, to_char(m.dat, :mask3) sdata, m.comment scomm
+select k.name||\' / \'||t.name stype,
+       to_char(m.value, :mask1) nvalue,
+       to_char(m.dat, :mask3) sdata,
+       m.comment scomm
 from minus m
     join type t on t.id = m.type_id
     join kind k on k.id = t.kind_id
-where t.kind_id = :id
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\' and t.kind_id = :id
 order by m.dat desc, stype, m.id desc',
             'sql3' => '',
         ],
         22 => [
-            'title' => 'Turnover-Types',
+            'title' => 'Turnover-Types(PLN)',
             'sql1' => '
-select k.name||\' / \'||t.name stype, t.id sid, to_char(sum(m.value), :mask1) nsuma, count(*) nile
+select k.name||\' / \'||t.name stype,
+       t.id sid,
+       to_char(sum(m.value), :mask1) nsuma,
+       count(*) nile
 from minus m
     join type t on t.id = m.type_id
     join kind k on k.id = t.kind_id
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 group by k.name||\' / \'||t.name, t.id
 order by stype',
             'sql2' => '
-select k.name||\' / \'||t.name stype, to_char(m.value, :mask1) nvalue, to_char(m.dat, :mask3) sdata, m.comment scomm
+select k.name||\' / \'||t.name stype,
+       to_char(m.value, :mask1) nvalue,
+       to_char(m.dat, :mask3) sdata,
+       m.comment scomm
 from minus m
     join type t on t.id = m.type_id
     join kind k on k.id = t.kind_id
-where m.type_id = :id
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\' and m.type_id = :id
 order by m.dat desc, stype, m.id desc',
             'sql3' => '',
         ],
@@ -118,7 +140,11 @@ from
 group by tab.oname||\' / \'||tab.aname, tab.id, c.code
 order by saccount',
             'sql2' => '
-select k.name||\' / \'||t.name stype, to_char(-m.value, :mask1) nvalue, m.dat xdat, to_char(m.dat, :mask3) sdata, m.comment scomm
+select k.name||\' / \'||t.name stype,
+       to_char(-m.value, :mask1) nvalue,
+       m.dat xdat,
+       to_char(m.dat, :mask3) sdata,
+       m.comment scomm
 from minus m
     join type t on t.id = m.type_id
     join kind k on k.id = t.kind_id
@@ -139,18 +165,29 @@ order by xdat desc, stype',
             'sql3' => '',
         ],
         24 => [
-            'title' => 'Turnover-Transactions',
+            'title' => 'Turnover-Transactions(PLN)',
             'sql1' => '
-select t.name stransaction, t.id sid, to_char(sum(m.value), :mask1) nsuma, count(*) nile
+select t.name stransaction,
+       t.id sid,
+       to_char(sum(m.value), :mask1) nsuma,
+       count(*) nile
 from minus m
     join transaction t on t.id = m.transaction_id
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 group by t.name, t.id
 order by stransaction',
             'sql2' => '
-select t.name stransaction, to_char(m.value, :mask1) nvalue, to_char(m.dat, :mask3) sdata, m.comment scomm
+select t.name stransaction,
+       to_char(m.value, :mask1) nvalue,
+       to_char(m.dat, :mask3) sdata,
+       m.comment scomm
 from minus m
     join transaction t on t.id = m.transaction_id
-where t.id = :id
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\' and t.id = :id
 order by m.dat desc, stransaction, m.id desc',
             'sql3' => '',
         ],
@@ -206,10 +243,15 @@ order by m.dat desc, m.id desc',
             'sql3' => 'mies',
         ],
         33 => [
-            'title' => 'Minus-Comments-Sum',
+            'title' => 'Minus-Comments-Sum(PLN)',
             'sql1' => '
-select m.comment scomment, to_char(sum(m.value), :mask1) nsuma, count(*) nile
+select m.comment scomment,
+       to_char(sum(m.value), :mask1) nsuma,
+       count(*) nile
 from minus m
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 group by m.comment
 order by scomment',
             'sql2' => '',
@@ -361,22 +403,33 @@ order by o.name, a.name, s.dat desc, s.id desc',
             'sql3' => '',
         ],
         41 => [
-            'title' => 'Bilans',
+            'title' => 'Bilans(PLN)',
             'sql1' => '
 select t2.mies smies,
        to_char(sum(t2.valplus), :mask1) nplus,
        to_char(sum(t2.valminus), :mask1) nminus,
        to_char(sum(t2.valplus - t2.valminus), :mask1) nsaldo
 from (
-select case when t1.sign = \'plus\' then t1.val else 0 end valplus,
-       case when t1.sign = \'minus\' then t1.val else 0 end valminus,
+select case t1.sign when 1 then t1.val else 0 end valplus,
+       case t1.sign when -1 then t1.val else 0 end valminus,
        t1.data mies
 from (
-select \'minus\' sign, value val, to_char(dat, \'YYYY/MM\') data from minus
+select -1 sign, m.value val, to_char(m.dat, \'YYYY/MM\') data
+from minus m
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 union all
-select \'plus\' sign, value val, to_char(dat, \'YYYY/MM\') data from plus
+select 1 sign, value val, to_char(dat, \'YYYY/MM\') data
+from plus p
+    join account a on a.id = p.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 union all
-select \'plus\' sign, sum(bo) val, \'0000/00\' data from account
+select 1 sign, sum(bo) val, \'0000/00\' data
+from account a
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 ) t1
 ) t2
 group by grouping sets ((t2.mies), ())
@@ -391,7 +444,7 @@ order by t2.mies nulls last',
             'sql3' => '',
         ],
         51 => [
-            'title' => 'Minus-mies,kind,type,account',
+            'title' => 'Minus-mies,kind,type,account(PLN)',
             'sql1' => '
 select to_char(m.dat, \'YYYY/MM\') smies,
        k.name skind,
@@ -403,13 +456,15 @@ from minus m
     join kind k on k.id = t.kind_id
     join account a on a.id = m.account_id
     join organization o on o.id = a.organization_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 group by rollup (smies, skind, stype, saccount)
 order by smies desc nulls last, skind nulls last, stype nulls last, saccount nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
         52 => [
-            'title' => 'Minus-mies,account,kind,type',
+            'title' => 'Minus-mies,account,kind,type(PLN)',
             'sql1' => '
 select to_char(m.dat, \'YYYY/MM\') smies,
        o.name||\' / \'||a.name saccount,
@@ -421,13 +476,15 @@ from minus m
     join kind k on k.id = t.kind_id
     join account a on a.id = m.account_id
     join organization o on o.id = a.organization_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 group by rollup (smies, saccount, skind, stype)
 order by smies desc nulls last, saccount nulls last, skind nulls last, stype nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
         53 => [
-            'title' => 'Minus-kind,type,account,mies',
+            'title' => 'Minus-kind,type,account,mies(PLN)',
             'sql1' => '
 select k.name skind,
        k.name||\' / \'||t.name stype,
@@ -439,13 +496,15 @@ from minus m
     join kind k on k.id = t.kind_id
     join account a on a.id = m.account_id
     join organization o on o.id = a.organization_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 group by rollup (skind, stype, saccount, smies)
 order by skind nulls last, stype nulls last, saccount nulls last, smies desc nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
         54 => [
-            'title' => 'Minus-account,kind,type,mies',
+            'title' => 'Minus-account,kind,type,mies(PLN)',
             'sql1' => '
 select o.name||\' / \'||a.name saccount,
        k.name skind,
@@ -457,13 +516,15 @@ from minus m
     join kind k on k.id = t.kind_id
     join account a on a.id = m.account_id
     join organization o on o.id = a.organization_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 group by rollup (saccount, skind, stype, smies)
 order by saccount nulls last, skind nulls last, stype nulls last, smies desc nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
         55 => [
-            'title' => 'Minus-kind,mies',
+            'title' => 'Minus-kind,mies(PLN)',
             'sql1' => '
 select qkind skind,
        qmies smies,
@@ -479,6 +540,9 @@ select k.name qkind,
 from minus m
     join type t on t.id = m.type_id
     join kind k on k.id = t.kind_id
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 group by rollup (qkind, qmies)
 ) q
 order by skind nulls last, smies desc nulls last',
@@ -486,7 +550,7 @@ order by skind nulls last, smies desc nulls last',
             'sql3' => '',
         ],
         56 => [
-            'title' => 'Minus-mies,kind',
+            'title' => 'Minus-mies,kind(PLN)',
             'sql1' => '
 select to_char(m.dat, \'YYYY/MM\') smies,
        k.name skind,
@@ -494,6 +558,9 @@ select to_char(m.dat, \'YYYY/MM\') smies,
 from minus m
     join type t on t.id = m.type_id
     join kind k on k.id = t.kind_id
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
 group by rollup (smies, skind)
 order by smies desc nulls last, skind nulls last',
             'sql2' => '',

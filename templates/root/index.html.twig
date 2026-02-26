@@ -2,6 +2,15 @@
 
 {% block title %}Plus Minus Application{% endblock %}
 
+{% block stylesheets %}
+    <style>
+        /*Layout - lewy kontent*/
+        div.content1 {
+            margin-left: 50px;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <div class="content1">
         <h1>System PlusMinus</h1>
@@ -25,5 +34,6 @@
                 {#        {% endif %} #}
             {% endif %}
         {% endfor %}
+        <div>======</div>
     </div>
 {% endblock %}
