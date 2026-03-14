@@ -33,20 +33,17 @@
                             {% if col|first != 'x' %}
                                 {% if col|first == 'n' %}
                                     {% set tdStyle = ' style="text-align: right"' %}
+                                {% elseif col|first == 'c' %}
+                                    {% set tdStyle = ' style="text-align: center"' %}
                                 {% else %}
                                     {% set tdStyle = '' %}
                                 {% endif %}
-                                {% if record1.(col) == '0.00' %}
-                                    {% set tdElement = '' %}
-                                {% else %}
-                                    {% set tdElement = record1.(col) %}
-                                {% endif %}
-                                <td{{ tdStyle|raw }}>{{ tdElement }}</td>
+                                <td{{ tdStyle|raw }}>{{ record1.(col) }}</td>
                             {% endif %}
                         {% endfor %}
                         {% if tab >= 0 %}
                             <td>
-                                <a href="{{ path('route_sql') }}/{{ tab }}/{{ record1.sid }}"{% if id == record1.sid %} style="color: yellow"{% endif %}>==></a>
+                                <a href="{{ path('route_sql') }}/{{ tab }}/{{ record1.nid }}"{% if id == record1.nid %} style="color: yellow"{% endif %}>==></a>
                             </td>
                         {% endif %}
                     </tr>
@@ -72,7 +69,7 @@
                     <tr>
                         {% for col in record2|keys %}
                             {% if col|first != 'x' %}
-                                <td{% if col|first == 'n' %} style="text-align: right"{% endif %}>{{ record2.(col) == '0.00' ? '' : record2.(col) }}</td>
+                                <td{% if col|first == 'n' %} style="text-align: right"{% elseif col|first == 'c' %} style="text-align: center"{% endif %}>{{ record2.(col) }}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>

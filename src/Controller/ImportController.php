@@ -81,7 +81,8 @@ final class ImportController extends AbstractController
                             $import1->setBillsource($fileRow[3]);
                             $import1->setBilldestination($fileRow[4]);
                             $import1->setTitle($fileRow[5]);
-                            $import1->setValue((int)(((float)strtr(str_replace(' ', '', $fileRow[6]), ',', '.')) * 100));
+//                            $import1->setValue((int)(((float)strtr(str_replace(' ', '', $fileRow[6]), ',', '.')) * 100));
+                            $import1->setValue((int)str_replace(',', '', str_replace(' ', '', $fileRow[6])));
                             $import1->setRefer($fileRow[7]);
                             $import1->setType($fileRow[8]);
                             $import1->setCategory($fileRow[9]);
@@ -123,6 +124,7 @@ final class ImportController extends AbstractController
             return $this->render('import/import1.html.twig', [
                 'records1' => $import1Repository->Import1List($session->get('sessionQueryExtra', 'and i.use=0 order by i.valuedate desc, i.id')),
                 'sessionQueryExtra' => $session->get('sessionQueryExtra', 'and i.use=0 order by i.valuedate desc, i.id'),
+                'cnt' => $import1Repository->Import1Count()[0]['cnt'],
             ]);
 //
         }

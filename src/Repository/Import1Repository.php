@@ -58,7 +58,7 @@ from import1 i
     left join account a on a.id = m.account_id
     left join organization o on o.id = a.organization_id
     left join currency c on c.id = a.currency_id
-where c.code = 'PLN'
+where 1=1
 eof;
 
         $sql = $sqlMain . ' ' . $queryExtra;
@@ -69,12 +69,73 @@ eof;
                 'mask3' => $this->mask3,
             ]);
         } catch (Exception $e) {
-            return [];
+            return [
+                0 => [
+                    'idalias' => -1,
+                    'valuedatealias' => 'ERR',
+                    'postingdatealias' => 'ERR',
+                    'x' => 'ERR',
+                    'typealias' => 'ERR',
+                    'contractoralias' => '',
+                    'titlealias' => '',
+                    'categoryalias' => $e->getMessage(),
+                    'value' => 0,
+                    'valuealias' => 'ERR',
+                    'lastalias' => 0,
+                    'usealias' => 0,
+                    'has' => 'X',
+                ],
+            ];
         }
         try {
             return $res->fetchAllAssociative();
         } catch (Exception $e) {
-            return [];
+            return [
+                0 => [
+                    'idalias' => -1,
+                    'valuedatealias' => 'ERR',
+                    'postingdatealias' => 'ERR',
+                    'x' => 'ERR',
+                    'typealias' => 'ERR',
+                    'contractoralias' => '',
+                    'titlealias' => '',
+                    'categoryalias' => $e->getMessage(),
+                    'value' => 0,
+                    'valuealias' => 'ERR',
+                    'lastalias' => 0,
+                    'usealias' => 0,
+                    'has' => 'X',
+                ],
+            ];
+        }
+    }
+
+    public function Import1Count(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = <<<'eof'
+select count(*) cnt
+from import1
+eof;
+
+        try {
+            $res = $conn->executeQuery($sql);
+        } catch (Exception $e) {
+            return [
+                0 => [
+                    'cnt' => $e->getMessage(),
+                ],
+            ];
+        }
+        try {
+            return $res->fetchAllAssociative();
+        } catch (Exception $e) {
+            return [
+                0 => [
+                    'cnt' => $e->getMessage(),
+                ],
+            ];
         }
     }
 }

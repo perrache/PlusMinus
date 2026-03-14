@@ -14,11 +14,11 @@ class SqlService
         11 => [
             'title' => 'Dictionary-Kind-Type',
             'sql1' => '
-select k.name skind, k.id sid
+select k.name skind, k.id nid
 from kind k
 order by skind',
             'sql2' => '
-select t.name stype, t.id sid
+select t.name stype, t.id nid
 from type t
 where t.kind_id = :id
 order by stype',
@@ -27,11 +27,11 @@ order by stype',
         12 => [
             'title' => 'Dictionary-Organization-Account',
             'sql1' => '
-select o.name sorganization, o.id sid
+select o.name sorganization, o.id nid
 from organization o
 order by sorganization',
             'sql2' => '
-select a.name saccount, c.code scode, a.id sid
+select a.name saccount, c.code scode, a.id nid
 from account a
     join currency c on c.id = a.currency_id
 where a.organization_id = :id
@@ -48,7 +48,7 @@ order by saccount',
             'title' => 'Turnover-Kinds(PLN)',
             'sql1' => '
 select k.name skind,
-       k.id sid,
+       k.id nid,
        to_char(sum(m.value), :mask1) nsuma,
        count(*) nile
 from minus m
@@ -77,7 +77,7 @@ order by m.dat desc, stype, m.id desc',
             'title' => 'Turnover-Types(PLN)',
             'sql1' => '
 select k.name||\' / \'||t.name stype,
-       t.id sid,
+       t.id nid,
        to_char(sum(m.value), :mask1) nsuma,
        count(*) nile
 from minus m
@@ -106,7 +106,7 @@ order by m.dat desc, stype, m.id desc',
             'title' => 'Turnover-Accounts',
             'sql1' => '
 select tab.oname||\' / \'||tab.aname saccount,
-       tab.id sid,
+       tab.id nid,
        case c.code when \'PLN\' then \'\' else c.code end swal,
        to_char(sum(tab.bo), :mask1) nbo,
        to_char(sum(tab.val), :mask1) nsaldo,
@@ -168,7 +168,7 @@ order by xdat desc, stype',
             'title' => 'Turnover-Transactions(PLN)',
             'sql1' => '
 select t.name stransaction,
-       t.id sid,
+       t.id nid,
        to_char(sum(m.value), :mask1) nsuma,
        count(*) nile
 from minus m
@@ -349,7 +349,7 @@ order by o.name, a.name, s.dat desc, s.id desc',
             'title' => 'Saldo-Accounts',
             'sql1' => '
 select tab.oname||\' / \'||tab.aname saccount,
-       tab.id sid,
+       tab.id nid,
        case c.code when \'PLN\' then \'\' else c.code end swal,
        to_char(sum(tab.bo), :mask1) nbo,
        to_char(sum(tab.val), :mask1) nsaldo,
@@ -563,6 +563,51 @@ from minus m
 where c.code = \'PLN\'
 group by rollup (smies, skind)
 order by smies desc nulls last, skind nulls last',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        61 => [
+            'title' => 'Import1float-Errors',
+            'sql1' => '
+select to_char(i.valuedate, :mask3) sidata,
+       i.value nivalue,
+       f.value nfvalue,
+       to_char(f.valuedate, :mask3) sfdata
+from import1 i
+    join import1float f on i.refer = f.refer
+where i.value <> f.value
+order by i.id',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        62 => [
+            'title' => 'Import1UniqueControl',
+            'sql1' => '
+select i.id nid,
+       to_char(i.valuedate, :mask3) "cData Operacji",
+       to_char(i.postingdate, :mask3) "cData Księgowania",
+       case when i.postingdate <> i.valuedate then \'X\' else \'\' end cx,
+       i.type "sTyp Operacji",
+       i.contractor||\' \'||i.title "sSzczegóły Operacji",
+       i.category sKategoria,
+       to_char(i.value, :mask1) nKwota,
+       i.last cLast,
+       i.use cUse,
+       i.refer crefer
+from import1 i
+where (i.valuedate, i.value) in
+(select t.valuedate,
+        t.value
+from
+    (select count(*),
+            valuedate,
+            value
+     from import1
+     group by valuedate, value
+     having count(*) > 1
+     ) t
+)
+order by i.valuedate desc, i.value, i.id',
             'sql2' => '',
             'sql3' => '',
         ],
