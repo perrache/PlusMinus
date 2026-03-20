@@ -130,7 +130,7 @@ final class ImportController extends AbstractController
         return $this->render('import/import.html.twig', ['form' => $form]);
     }
 
-    #[Route('/import1Use/{iid}/{mid}/{mrefer}', name: 'route_imp_import1Use', methods: ['GET'])]
+    #[Route('/import1Use/{iid}', name: 'route_imp_import1Use', methods: ['GET'])]
     public function import1Use(Connection $conn, int $iid = 0): Response
     {
         try {
