@@ -52,43 +52,6 @@
         .yellow {
             color: yellow;
         }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            border-bottom: 1px dotted black;
-            cursor: pointer;
-        }
-
-        .tooltiptext {
-            visibility: hidden;
-            width: 300px;
-            background-color: dimgray;
-            color: cyan;
-            text-align: left;
-            border-radius: 6px;
-            padding: 0 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 150%;
-            left: 50%;
-            margin-left: -210px;
-        }
-
-        .tooltiptext::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 70%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: dimgray transparent transparent transparent;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-        }
     </style>
 {% endblock %}
 
@@ -97,7 +60,6 @@
         <h1>Import1</h1>
         {% set cLast = 0 %}
         {% set cUse = 0 %}
-        {% set cHas = 0 %}
         {% for record1 in records1 %}
             {% if record1.lastalias == 1 %}
                 {% set cLast = cLast + 1 %}
@@ -105,11 +67,8 @@
             {% if record1.usealias == 1 %}
                 {% set cUse = cUse + 1 %}
             {% endif %}
-            {% if record1.has == 'X' %}
-                {% set cHas = cHas + 1 %}
-            {% endif %}
         {% endfor %}
-        <h3>{{ records1|length }} records, {{ cLast }} last, {{ cUse }} use, {{ cHas }} has - {{ cnt }} records Import1</h3>
+        <h3>{{ records1|length }} records, {{ cLast }} last, {{ cUse }} use</h3>
         <h3 class="yellow">{{ sessionQueryExtra }}</h3>
         <table>
             <tr>
@@ -123,7 +82,6 @@
                 <th>Kwota</th>
                 <th>Last</th>
                 <th>Use</th>
-                <th>Has</th>
                 <th>&nbsp;</th>
             </tr>
             {% for record1 in records1 %}
@@ -151,36 +109,15 @@
                     </td>
                     <td class="center">{{ record1.lastalias }}</td>
                     <td class="center">{{ record1.usealias }}</td>
-                    <td class="center">
-                        {% if record1.has == 'X' %}
-                            <div class="inside-center yellow">
-                                {{ record1.has }}
-                            </div>
-                        {% else %}
-                            <div class="inside-center tooltip">
-                                {{ record1.has }}
-                                <div class="tooltiptext">
-                                    <h5>{{ record1.type }}</h5>
-                                    <h5>{{ record1.account }}</h5>
-                                    <h5>{{ record1.comment }}</h5>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </td>
                     <td>
-                        {% if record1.has == 'X' %}
-                            {% if record1.value < 0 %}
-                                {% if record1.usealias == 0 %}
-                                    <a href="{{ path('app_minus_new1', {'iid': record1.idalias}) }}">import</a>
-                                {% endif %}
-                                <a href="{{ path('route_imp_import1Use', {'iid': record1.idalias}) }}">onlyUse</a>
+                        {% if record1.value < 0 %}
+                            {% if record1.usealias == 0 %}
+                                <a href="{{ path('app_minus_new1', {'iid': record1.idalias}) }}">import</a>
                             {% endif %}
-                            {% if record1.value > 0 %}
-                                <a href="{{ path('route_imp_import1Use', {'iid': record1.idalias}) }}">onlyUse</a>
-                            {% endif %}
+                            <a href="{{ path('route_imp_import1Use', {'iid': record1.idalias}) }}">onlyUse</a>
                         {% endif %}
-                        {% if record1.has == 'O' %}
-                            <a href="{{ path('route_imp_import1Use', {'iid': record1.idalias, 'mid': record1.idm, 'mrefer': record1.referalias}) }}">Use</a>
+                        {% if record1.value > 0 %}
+                            <a href="{{ path('route_imp_import1Use', {'iid': record1.idalias}) }}">onlyUse</a>
                         {% endif %}
                     </td>
                 </tr>

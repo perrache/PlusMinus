@@ -43,21 +43,8 @@ select i.id idAlias,
        i.value,
        to_char(i.value, :mask1) valueAlias,
        i.last lastAlias,
-       i.use useAlias,
-       case when m.id is null then 'X' else 'O' end has,
-       i.refer referAlias,
-       m.id idM,
-       k.name||' / '||t.name type,
-       o.name||' / '||a.name account,
-       m.comment
+       i.use useAlias
 from import1 i
-    left join minus m on i.value = -m.value and i.valuedate = m.dat
-    left join type t on t.id = m.type_id
-    left join kind k on k.id = t.kind_id
-    left join transaction r on r.id = m.transaction_id
-    left join account a on a.id = m.account_id
-    left join organization o on o.id = a.organization_id
-    left join currency c on c.id = a.currency_id
 where 1=1
 eof;
 
@@ -83,7 +70,6 @@ eof;
                     'valuealias' => 'ERR',
                     'lastalias' => 0,
                     'usealias' => 0,
-                    'has' => 'X',
                 ],
             ];
         }
@@ -104,7 +90,6 @@ eof;
                     'valuealias' => 'ERR',
                     'lastalias' => 0,
                     'usealias' => 0,
-                    'has' => 'X',
                 ],
             ];
         }

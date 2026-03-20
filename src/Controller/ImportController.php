@@ -124,7 +124,6 @@ final class ImportController extends AbstractController
             return $this->render('import/import1.html.twig', [
                 'records1' => $import1Repository->Import1List($session->get('sessionQueryExtra', 'and i.use=0 order by i.valuedate desc, i.id')),
                 'sessionQueryExtra' => $session->get('sessionQueryExtra', 'and i.use=0 order by i.valuedate desc, i.id'),
-                'cnt' => $import1Repository->Import1Count()[0]['cnt'],
             ]);
 //
         }
@@ -132,11 +131,10 @@ final class ImportController extends AbstractController
     }
 
     #[Route('/import1Use/{iid}/{mid}/{mrefer}', name: 'route_imp_import1Use', methods: ['GET'])]
-    public function import1Use(Connection $conn, int $iid = 0, int $mid = 0, string $mrefer = ''): Response
+    public function import1Use(Connection $conn, int $iid = 0): Response
     {
         try {
             if ($iid > 0) $res = $conn->prepare("update import1 set use = 1 where id = $iid")->executeStatement();
-            if ($mid > 0) $res = $conn->prepare("update minus set refer = '$mrefer' where id = $mid")->executeStatement();
         } catch (Exception $e) {
             return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
         }
