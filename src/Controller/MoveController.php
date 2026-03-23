@@ -37,7 +37,7 @@ final class MoveController extends AbstractController
         }
 
         return $this->render('move/new.html.twig', [
-            'move' => $move,
+//            'move' => $move,
             'form' => $form,
         ]);
     }
@@ -63,7 +63,7 @@ final class MoveController extends AbstractController
         }
 
         return $this->render('move/edit.html.twig', [
-            'move' => $move,
+//            'move' => $move,
             'form' => $form,
         ]);
     }

@@ -37,7 +37,7 @@ final class MinusController extends AbstractController
         }
 
         return $this->render('minus/new.html.twig', [
-            'minu' => $minu,
+//            'minu' => $minu,
             'form' => $form,
         ]);
     }
@@ -63,7 +63,7 @@ final class MinusController extends AbstractController
         }
 
         return $this->render('minus/edit.html.twig', [
-            'minu' => $minu,
+//            'minu' => $minu,
             'form' => $form,
         ]);
     }

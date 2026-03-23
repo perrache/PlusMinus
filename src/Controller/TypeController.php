@@ -37,7 +37,7 @@ final class TypeController extends AbstractController
         }
 
         return $this->render('type/new.html.twig', [
-            'type' => $type,
+//            'type' => $type,
             'form' => $form,
         ]);
     }
@@ -63,7 +63,7 @@ final class TypeController extends AbstractController
         }
 
         return $this->render('type/edit.html.twig', [
-            'type' => $type,
+//            'type' => $type,
             'form' => $form,
         ]);
     }

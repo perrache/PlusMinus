@@ -37,7 +37,7 @@ final class AccountController extends AbstractController
         }
 
         return $this->render('account/new.html.twig', [
-            'account' => $account,
+//            'account' => $account,
             'form' => $form,
         ]);
     }
@@ -63,7 +63,7 @@ final class AccountController extends AbstractController
         }
 
         return $this->render('account/edit.html.twig', [
-            'account' => $account,
+//            'account' => $account,
             'form' => $form,
         ]);
     }

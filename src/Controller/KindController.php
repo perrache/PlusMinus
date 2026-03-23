@@ -37,7 +37,7 @@ final class KindController extends AbstractController
         }
 
         return $this->render('kind/new.html.twig', [
-            'kind' => $kind,
+//            'kind' => $kind,
             'form' => $form,
         ]);
     }
@@ -63,7 +63,7 @@ final class KindController extends AbstractController
         }
 
         return $this->render('kind/edit.html.twig', [
-            'kind' => $kind,
+//            'kind' => $kind,
             'form' => $form,
         ]);
     }

@@ -37,7 +37,7 @@ final class OrganizationController extends AbstractController
         }
 
         return $this->render('organization/new.html.twig', [
-            'organization' => $organization,
+//            'organization' => $organization,
             'form' => $form,
         ]);
     }
@@ -63,7 +63,7 @@ final class OrganizationController extends AbstractController
         }
 
         return $this->render('organization/edit.html.twig', [
-            'organization' => $organization,
+//            'organization' => $organization,
             'form' => $form,
         ]);
     }
