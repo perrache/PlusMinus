@@ -63,7 +63,7 @@ final class SourceController extends AbstractController
         }
 
         return $this->render('source/edit.html.twig', [
-//            'source' => $source,
+            'source' => $source,
             'form' => $form,
         ]);
     }

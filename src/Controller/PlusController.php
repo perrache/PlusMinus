@@ -63,7 +63,7 @@ final class PlusController extends AbstractController
         }
 
         return $this->render('plus/edit.html.twig', [
-//            'plu' => $plu,
+            'plu' => $plu,
             'form' => $form,
         ]);
     }

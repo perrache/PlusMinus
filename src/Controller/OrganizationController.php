@@ -63,7 +63,7 @@ final class OrganizationController extends AbstractController
         }
 
         return $this->render('organization/edit.html.twig', [
-//            'organization' => $organization,
+            'organization' => $organization,
             'form' => $form,
         ]);
     }

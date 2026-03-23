@@ -63,7 +63,7 @@ final class TransactionController extends AbstractController
         }
 
         return $this->render('transaction/edit.html.twig', [
-//            'transaction' => $transaction,
+            'transaction' => $transaction,
             'form' => $form,
         ]);
     }

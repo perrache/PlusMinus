@@ -63,7 +63,7 @@ final class CurrencyController extends AbstractController
         }
 
         return $this->render('currency/edit.html.twig', [
-//            'currency' => $currency,
+            'currency' => $currency,
             'form' => $form,
         ]);
     }
