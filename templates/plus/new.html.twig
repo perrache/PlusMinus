@@ -7,5 +7,11 @@
 
     {{ include('plus/_form.html.twig') }}
 
-    <a href="{{ path('app_plus_index') }}">back to list</a>
+    {% set curPath = app.current_route %}
+    {% if curPath == 'app_plus_new' %}
+        <a href="{{ path('app_plus_index') }}">back to list</a>
+    {% endif %}
+    {% if curPath == 'app_plus_new1' %}
+        <a href="{{ path('route_imp_import1') }}">back to Import</a>
+    {% endif %}
 {% endblock %}

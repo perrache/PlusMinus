@@ -31,6 +31,9 @@ class Plus
     #[ORM\JoinColumn(nullable: false)]
     private ?Source $source = null;
 
+    #[ORM\Column(length: 16, nullable: true)]
+    private ?string $refer = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,6 +95,18 @@ class Plus
     public function setSource(?Source $source): static
     {
         $this->source = $source;
+
+        return $this;
+    }
+
+    public function getRefer(): ?string
+    {
+        return $this->refer;
+    }
+
+    public function setRefer(?string $refer): static
+    {
+        $this->refer = $refer;
 
         return $this;
     }

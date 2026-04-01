@@ -27,7 +27,7 @@ class Import1Repository extends ServiceEntityRepository
         $this->mask3 = $mask3;
     }
 
-    public function Import1List(string $queryExtra = 'and i.use=0 order by i.valuedate desc, i.id'): array
+    public function Import1List(string $queryExtra = 'and 1=1'): array
     {
         $conn = $this->getEntityManager()->getConnection();
 

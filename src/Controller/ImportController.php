@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Import1;
 use App\Entity\Minus;
+use App\Entity\Plus;
 use App\Form\Import1Type;
 use App\Form\MinusType;
+use App\Form\PlusType;
 use App\Form\PlikDoTabeli1Type;
 use App\Repository\AccountRepository;
 use App\Repository\Import1Repository;
@@ -110,11 +112,12 @@ final class ImportController extends AbstractController
     public function import1(Import1Repository $import1Repository,
                             Request           $request): Response
     {
+        $defaultQuery = 'and i.use=0 order by i.valuedate desc, i.id';
         $session = $request->getSession();
-        if (!$session->has('sessionQueryExtra')) $session->set('sessionQueryExtra', 'and i.use=0 order by i.valuedate desc, i.id');
+        if (!$session->has('sessionQueryExtra')) $session->set('sessionQueryExtra', $defaultQuery);
 
         $form = $this->createForm(Import1Type::class, null, [
-            'initialValue' => $session->get('sessionQueryExtra', 'and i.use=0 order by i.valuedate desc, i.id')
+            'initialValue' => $session->get('sessionQueryExtra', $defaultQuery)
         ]);
 
         $form->handleRequest($request);
@@ -122,8 +125,8 @@ final class ImportController extends AbstractController
 //
             $session->set('sessionQueryExtra', $form->get('queryExtra')->getData());
             return $this->render('import/import1.html.twig', [
-                'records1' => $import1Repository->Import1List($session->get('sessionQueryExtra', 'and i.use=0 order by i.valuedate desc, i.id')),
-                'sessionQueryExtra' => $session->get('sessionQueryExtra', 'and i.use=0 order by i.valuedate desc, i.id'),
+                'records1' => $import1Repository->Import1List($session->get('sessionQueryExtra', $defaultQuery)),
+                'sessionQueryExtra' => $session->get('sessionQueryExtra', $defaultQuery),
             ]);
 //
         }
@@ -141,12 +144,12 @@ final class ImportController extends AbstractController
         return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/new/{iid}', name: 'app_minus_new1', methods: ['GET', 'POST'])]
-    public function new1(Request                $request,
-                         EntityManagerInterface $entityManager,
-                         Connection             $conn,
-                         AccountRepository      $accountRepository,
-                         int                    $iid = 0): Response
+    #[Route('/newminus/{iid}', name: 'app_minus_new1', methods: ['GET', 'POST'])]
+    public function minusnew1(Request                $request,
+                              EntityManagerInterface $entityManager,
+                              Connection             $conn,
+                              AccountRepository      $accountRepository,
+                              int                    $iid = 0): Response
     {
         if ($iid <= 0) return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
         try {
@@ -165,16 +168,42 @@ final class ImportController extends AbstractController
 //
             $entityManager->persist($minu);
             $entityManager->flush();
-            try {
-                $res = $conn->prepare("update import1 set use = 1 where id = $iid")->executeStatement();
-            } catch (Exception $e) {
-                return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
-            }
             return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
 //
         }
         return $this->render('minus/new.html.twig', [
-            'minu' => $minu,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/newplus/{iid}', name: 'app_plus_new1', methods: ['GET', 'POST'])]
+    public function plusnew1(Request                $request,
+                             EntityManagerInterface $entityManager,
+                             Connection             $conn,
+                             AccountRepository      $accountRepository,
+                             int                    $iid = 0): Response
+    {
+        if ($iid <= 0) return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+        try {
+            $result = $conn->fetchAllAssociative("select * from import1 where id = $iid");
+        } catch (Exception $e) {
+            return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+        }
+        $plu = new Plus();
+        $plu->setValue($result[0]['value']);
+        $plu->setDat(new \DateTime($result[0]['valuedate']));
+        $plu->setRefer($result[0]['refer']);
+        $plu->setAccount($accountRepository->findOneBy(['import' => 1]));
+        $form = $this->createForm(PlusType::class, $plu);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+//
+            $entityManager->persist($plu);
+            $entityManager->flush();
+            return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
+//
+        }
+        return $this->render('plus/new.html.twig', [
             'form' => $form,
         ]);
     }
