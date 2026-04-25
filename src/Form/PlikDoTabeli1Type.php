@@ -16,7 +16,7 @@ class PlikDoTabeli1Type extends AbstractType
         $builder
             ->add('file', ChoiceType::class, [
                 'choice_loader' => new CallbackChoiceLoader(static function (): array {
-                    $files = scandir('import');
+                    $files = scandir('import', SCANDIR_SORT_DESCENDING);
                     if ($files) {
                         $files = array_diff($files, ['.', '..']);
                         $files = array_filter($files, fn($file) => str_ends_with($file, '.csv'));

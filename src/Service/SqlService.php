@@ -6,7 +6,7 @@ class SqlService
 {
     public array $sqlArray = [
         10 => [
-            'title' => '',
+            'title' => 'Dictionary',
             'sql1' => '',
             'sql2' => '',
             'sql3' => '',
@@ -14,11 +14,13 @@ class SqlService
         11 => [
             'title' => 'Dictionary-Kind-Type',
             'sql1' => '
-select k.name skind, k.id nid
+select k.name skind,
+       k.id nid
 from kind k
 order by skind',
             'sql2' => '
-select t.name stype, t.id nid
+select t.name stype,
+       t.id nid
 from type t
 where t.kind_id = :id
 order by stype',
@@ -27,11 +29,14 @@ order by stype',
         12 => [
             'title' => 'Dictionary-Organization-Account',
             'sql1' => '
-select o.name sorganization, o.id nid
+select o.name sorganization,
+       o.id nid
 from organization o
 order by sorganization',
             'sql2' => '
-select a.name saccount, c.code scode, a.id nid
+select a.name saccount,
+       c.code scode,
+       a.id nid
 from account a
     join currency c on c.id = a.currency_id
 where a.organization_id = :id
@@ -39,7 +44,7 @@ order by saccount',
             'sql3' => '',
         ],
         20 => [
-            'title' => '',
+            'title' => 'Turnover',
             'sql1' => '',
             'sql2' => '',
             'sql3' => '',
@@ -150,15 +155,27 @@ from minus m
     join kind k on k.id = t.kind_id
 where m.account_id = :id
 union all
-select \'+\' stype, to_char(p.value, :mask1) nvalue, p.dat xdat, to_char(p.dat, :mask3) sdata, p.comment scomm
+select \'+\' stype,
+       to_char(p.value, :mask1) nvalue,
+       p.dat xdat,
+       to_char(p.dat, :mask3) sdata,
+       p.comment scomm
 from plus p
 where p.account_id = :id
 union all
-select \'+-\' stype, to_char(pm.value, :mask1) nvalue, pm.dat xdat, to_char(pm.dat, :mask3) sdata, pm.comment scomm
+select \'+-\' stype,
+       to_char(pm.value, :mask1) nvalue,
+       pm.dat xdat,
+       to_char(pm.dat, :mask3) sdata,
+       pm.comment scomm
 from move pm
 where pm.accplus_id = :id
 union all
-select \'+-\' stype, to_char(-pm.value, :mask1) nvalue, pm.dat xdat, to_char(pm.dat, :mask3) sdata, pm.comment scomm
+select \'+-\' stype,
+       to_char(-pm.value, :mask1) nvalue,
+       pm.dat xdat,
+       to_char(pm.dat, :mask3) sdata,
+       pm.comment scomm
 from move pm
 where pm.accminus_id = :id
 order by xdat desc, stype',
@@ -192,7 +209,7 @@ order by m.dat desc, stransaction, m.id desc',
             'sql3' => '',
         ],
         30 => [
-            'title' => '',
+            'title' => 'Tables',
             'sql1' => '',
             'sql2' => '',
             'sql3' => '',
@@ -302,102 +319,39 @@ order by smies desc, m.value desc',
             'sql3' => '',
         ],
         36 => [
-            'title' => 'Minus-Import1-Errors',
+            'title' => 'Minus-Refer-Count',
             'sql1' => '
-select -sum(value) nvalue,
-       \'i\' sx
-from import1
-where value<0
-and id not in (315, 287, 363, 486, 511, 512, 534, 537, 538)
-and valuedate < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
-union all
-select sum(value) nvalue,
-       \'m\' sx
-from
-(
-select value
-from minus
-where account_id=1
-and id not in (62, 125, 196, 239, 240)
-and dat < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
-union all
-select value
-from move
-where accminus_id=1
-and dat < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
-) t',
-            'sql2' => '',
-            'sql3' => '',
-        ],
-        37 => [
-            'title' => 'Saldo-All',
-            'sql1' => '
-select o.name||\' / \'||a.name saccount,
+select to_char(m.dat, \'YYYY/MM\') smies,
+       k.name skind,
+       k.name||\' / \'||t.name stype,
+       r.name stransaction,
+       o.name||\' / \'||a.name saccount,
        case c.code when \'PLN\' then \'\' else c.code end swal,
-       to_char(s.value, :mask1) nvalue,
-       to_char(s.dat, :mask3) sdata,
-       s.curid ncurid
-from saldo s
-    join account a on a.id = s.account_id
+       to_char(m.value, :mask1) nvalue,
+       to_char(m.dat, :mask3) sdata,
+       m.comment scomment,
+       m.refer srefer
+from minus m
+    join type t on t.id = m.type_id
+    join kind k on k.id = t.kind_id
+    join transaction r on r.id = m.transaction_id
+    join account a on a.id = m.account_id
     join organization o on o.id = a.organization_id
     join currency c on c.id = a.currency_id
-order by o.name, a.name, s.dat desc, s.id desc',
+where m.refer in
+      (select refer
+       from
+           (select refer,
+                   count(*)
+            from minus
+            group by refer
+            having count(*) > 1) t1)
+order by m.dat desc, m.refer, m.id desc',
             'sql2' => '',
-            'sql3' => '',
-        ],
-        38 => [
-            'title' => 'Saldo-Accounts',
-            'sql1' => '
-select tab.oname||\' / \'||tab.aname saccount,
-       tab.id nid,
-       case c.code when \'PLN\' then \'\' else c.code end swal,
-       to_char(sum(tab.bo), :mask1) nbo,
-       to_char(sum(tab.val), :mask1) nsaldo,
-       to_char(sum(tab.val+tab.lt), :mask1) ndost
-from
-    (select o.name oname, a.name aname, a.id, a.bo, a.bo val, a.lt, a.currency_id
-     from account a
-         join organization o on o.id = a.organization_id
-     union all
-     select o.name oname, a.name aname, a.id, 0 bo, -m.value val, 0 lt, a.currency_id
-     from minus m
-         join account a on a.id = m.account_id
-         join organization o on o.id = a.organization_id
-     union all
-     select o.name oname, a.name aname, a.id, 0 bo, p.value val, 0 lt, a.currency_id
-     from plus p
-         join account a on a.id = p.account_id
-         join organization o on o.id = a.organization_id
-     union all
-     select o.name oname, a.name aname, a.id, 0 bo, -pm.value val, 0 lt, a.currency_id
-     from move pm
-         join account a on a.id = pm.accminus_id
-         join organization o on o.id = a.organization_id
-     union all
-     select o.name oname, a.name aname, a.id, 0 bo, pm.value val, 0 lt, a.currency_id
-     from move pm
-         join account a on a.id = pm.accplus_id
-         join organization o on o.id = a.organization_id
-     ) tab
-        join currency c on c.id = tab.currency_id
-group by tab.oname||\' / \'||tab.aname, tab.id, c.code
-order by saccount',
-            'sql2' => '
-select o.name||\' / \'||a.name saccount,
-       case c.code when \'PLN\' then \'\' else c.code end swal,
-       to_char(s.value, :mask1) nvalue,
-       to_char(s.dat, :mask3) sdata,
-       s.curid ncurid
-from saldo s
-    join account a on a.id = s.account_id
-    join organization o on o.id = a.organization_id
-    join currency c on c.id = a.currency_id
-where s.account_id = :id
-order by o.name, a.name, s.dat desc, s.id desc',
             'sql3' => '',
         ],
         40 => [
-            'title' => '',
+            'title' => 'Report',
             'sql1' => '',
             'sql2' => '',
             'sql3' => '',
@@ -437,8 +391,82 @@ order by t2.mies nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
+        42 => [
+            'title' => 'Bottles',
+            'sql1' => '
+select tab.oname||\' / \'||tab.aname saccount,
+       tab.id nid,
+       case c.code when \'PLN\' then \'\' else c.code end swal,
+       to_char(sum(tab.bo), :mask1) nbo,
+       to_char(sum(tab.val), :mask1) nsaldo,
+       to_char(sum(tab.val+tab.lt), :mask1) ndost
+from
+    (select o.name oname, a.name aname, a.id, a.bo, a.bo val, a.lt, a.currency_id
+     from account a
+         join organization o on o.id = a.organization_id
+     union all
+     select o.name oname, a.name aname, a.id, 0 bo, -m.value val, 0 lt, a.currency_id
+     from minus m
+         join account a on a.id = m.account_id
+         join organization o on o.id = a.organization_id
+     union all
+     select o.name oname, a.name aname, a.id, 0 bo, p.value val, 0 lt, a.currency_id
+     from plus p
+         join account a on a.id = p.account_id
+         join organization o on o.id = a.organization_id
+     union all
+     select o.name oname, a.name aname, a.id, 0 bo, -pm.value val, 0 lt, a.currency_id
+     from move pm
+         join account a on a.id = pm.accminus_id
+         join organization o on o.id = a.organization_id
+     union all
+     select o.name oname, a.name aname, a.id, 0 bo, pm.value val, 0 lt, a.currency_id
+     from move pm
+         join account a on a.id = pm.accplus_id
+         join organization o on o.id = a.organization_id
+     ) tab
+        join currency c on c.id = tab.currency_id
+group by tab.oname||\' / \'||tab.aname, tab.id, c.code
+order by saccount',
+            'sql2' => '
+select k.name||\' / \'||t.name stype,
+       to_char(-m.value, :mask1) nvalue,
+       m.dat xdat,
+       to_char(m.dat, :mask3) sdata,
+       m.comment scomm
+from minus m
+    join type t on t.id = m.type_id
+    join kind k on k.id = t.kind_id
+where m.account_id = :id
+union all
+select \'+\' stype,
+       to_char(p.value, :mask1) nvalue,
+       p.dat xdat,
+       to_char(p.dat, :mask3) sdata,
+       p.comment scomm
+from plus p
+where p.account_id = :id
+union all
+select \'+-\' stype,
+       to_char(pm.value, :mask1) nvalue,
+       pm.dat xdat,
+       to_char(pm.dat, :mask3) sdata,
+       pm.comment scomm
+from move pm
+where pm.accplus_id = :id
+union all
+select \'+-\' stype,
+       to_char(-pm.value, :mask1) nvalue,
+       pm.dat xdat,
+       to_char(pm.dat, :mask3) sdata,
+       pm.comment scomm
+from move pm
+where pm.accminus_id = :id
+order by xdat desc, stype',
+            'sql3' => '',
+        ],
         50 => [
-            'title' => '',
+            'title' => 'Rollup',
             'sql1' => '',
             'sql2' => '',
             'sql3' => '',
@@ -566,50 +594,179 @@ order by smies desc nulls last, skind nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
-        61 => [
-            'title' => 'Import1float-Errors',
+        57 => [
+            'title' => 'xxx',
             'sql1' => '
-select to_char(i.valuedate, :mask3) sidata,
-       i.value nivalue,
-       f.value nfvalue,
-       to_char(f.valuedate, :mask3) sfdata
-from import1 i
-    join import1float f on i.refer = f.refer
-where i.value <> f.value
-order by i.id',
+select to_char(m.dat, \'YYYY/MM\') smies,
+       k.name skind,
+       to_char(sum(m.value), :mask1) nvalue
+from minus m
+    join type t on t.id = m.type_id
+    join kind k on k.id = t.kind_id
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
+group by rollup (smies, skind)
+order by smies desc nulls last, skind nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
-        62 => [
-            'title' => 'Import1UniqueControl',
+        58 => [
+            'title' => 'Minus-day,kind(PLN)',
             'sql1' => '
-select i.id nid,
-       to_char(i.valuedate, :mask3) "cData Operacji",
-       to_char(i.postingdate, :mask3) "cData Księgowania",
-       case when i.postingdate <> i.valuedate then \'X\' else \'\' end cx,
-       i.type "sTyp Operacji",
-       i.contractor||\' \'||i.title "sSzczegóły Operacji",
-       i.category sKategoria,
-       to_char(i.value, :mask1) nKwota,
-       i.last cLast,
-       i.use cUse,
-       i.refer crefer
-from import1 i
-where (i.valuedate, i.value) in
-(select t.valuedate,
-        t.value
-from
-    (select count(*),
-            valuedate,
-            value
-     from import1
-     group by valuedate, value
-     having count(*) > 1
-     ) t
-)
-order by i.valuedate desc, i.value, i.id',
+select to_char(m.dat, \'YYYY/MM/DD\') sday,
+       k.name skind,
+       to_char(sum(m.value), :mask1) nvalue
+from minus m
+    join type t on t.id = m.type_id
+    join kind k on k.id = t.kind_id
+    join account a on a.id = m.account_id
+    join currency c on c.id = a.currency_id
+where c.code = \'PLN\'
+group by rollup (sday, skind)
+order by sday desc nulls last, skind nulls last',
             'sql2' => '',
             'sql3' => '',
         ],
+//        61 => [
+//            'title' => 'Import1float-Errors',
+//            'sql1' => '
+//select to_char(i.valuedate, :mask3) sidata,
+//       i.value nivalue,
+//       f.value nfvalue,
+//       to_char(f.valuedate, :mask3) sfdata
+//from import1 i
+//    join import1float f on i.refer = f.refer
+//where i.value <> f.value
+//order by i.id',
+//            'sql2' => '',
+//            'sql3' => '',
+//        ],
+//        62 => [
+//            'title' => 'Import1UniqueControl',
+//            'sql1' => '
+//select i.id nid,
+//       to_char(i.valuedate, :mask3) "cData Operacji",
+//       to_char(i.postingdate, :mask3) "cData Księgowania",
+//       case when i.postingdate <> i.valuedate then \'X\' else \'\' end cx,
+//       i.type "sTyp Operacji",
+//       i.contractor||\' \'||i.title "sSzczegóły Operacji",
+//       i.category sKategoria,
+//       to_char(i.value, :mask1) nKwota,
+//       i.last cLast,
+//       i.use cUse,
+//       i.refer crefer
+//from import1 i
+//where (i.valuedate, i.value) in
+//(select t.valuedate,
+//        t.value
+//from
+//    (select count(*),
+//            valuedate,
+//            value
+//     from import1
+//     group by valuedate, value
+//     having count(*) > 1
+//     ) t
+//)
+//order by i.valuedate desc, i.value, i.id',
+//            'sql2' => '',
+//            'sql3' => '',
+//        ],
+//        36 => [
+//            'title' => 'Minus-Import1-Errors',
+//            'sql1' => '
+//select -sum(value) nvalue,
+//       \'i\' sx
+//from import1
+//where value<0
+//and id not in (315, 287, 363, 486, 511, 512, 534, 537, 538)
+//and valuedate < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
+//union all
+//select sum(value) nvalue,
+//       \'m\' sx
+//from
+//(
+//select value
+//from minus
+//where account_id=1
+//and id not in (62, 125, 196, 239, 240)
+//and dat < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
+//union all
+//select value
+//from move
+//where accminus_id=1
+//and dat < to_date(\'20-02-2026\', \'DD-MM-YYYY\')
+//) t',
+//            'sql2' => '',
+//            'sql3' => '',
+//        ],
+//        36 => [
+//            'title' => 'Saldo-All',
+//            'sql1' => '
+//select o.name||\' / \'||a.name saccount,
+//       case c.code when \'PLN\' then \'\' else c.code end swal,
+//       to_char(s.value, :mask1) nvalue,
+//       to_char(s.dat, :mask3) sdata,
+//       s.curid ncurid
+//from saldo s
+//    join account a on a.id = s.account_id
+//    join organization o on o.id = a.organization_id
+//    join currency c on c.id = a.currency_id
+//order by o.name, a.name, s.dat desc, s.id desc',
+//            'sql2' => '',
+//            'sql3' => '',
+//        ],
+//        37 => [
+//            'title' => 'Saldo-Accounts',
+//            'sql1' => '
+//select tab.oname||\' / \'||tab.aname saccount,
+//       tab.id nid,
+//       case c.code when \'PLN\' then \'\' else c.code end swal,
+//       to_char(sum(tab.bo), :mask1) nbo,
+//       to_char(sum(tab.val), :mask1) nsaldo,
+//       to_char(sum(tab.val+tab.lt), :mask1) ndost
+//from
+//    (select o.name oname, a.name aname, a.id, a.bo, a.bo val, a.lt, a.currency_id
+//     from account a
+//         join organization o on o.id = a.organization_id
+//     union all
+//     select o.name oname, a.name aname, a.id, 0 bo, -m.value val, 0 lt, a.currency_id
+//     from minus m
+//         join account a on a.id = m.account_id
+//         join organization o on o.id = a.organization_id
+//     union all
+//     select o.name oname, a.name aname, a.id, 0 bo, p.value val, 0 lt, a.currency_id
+//     from plus p
+//         join account a on a.id = p.account_id
+//         join organization o on o.id = a.organization_id
+//     union all
+//     select o.name oname, a.name aname, a.id, 0 bo, -pm.value val, 0 lt, a.currency_id
+//     from move pm
+//         join account a on a.id = pm.accminus_id
+//         join organization o on o.id = a.organization_id
+//     union all
+//     select o.name oname, a.name aname, a.id, 0 bo, pm.value val, 0 lt, a.currency_id
+//     from move pm
+//         join account a on a.id = pm.accplus_id
+//         join organization o on o.id = a.organization_id
+//     ) tab
+//        join currency c on c.id = tab.currency_id
+//group by tab.oname||\' / \'||tab.aname, tab.id, c.code
+//order by saccount',
+//            'sql2' => '
+//select o.name||\' / \'||a.name saccount,
+//       case c.code when \'PLN\' then \'\' else c.code end swal,
+//       to_char(s.value, :mask1) nvalue,
+//       to_char(s.dat, :mask3) sdata,
+//       s.curid ncurid
+//from saldo s
+//    join account a on a.id = s.account_id
+//    join organization o on o.id = a.organization_id
+//    join currency c on c.id = a.currency_id
+//where s.account_id = :id
+//order by o.name, a.name, s.dat desc, s.id desc',
+//            'sql3' => '',
+//        ],
     ];
 }

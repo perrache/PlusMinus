@@ -9,12 +9,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class RootController extends AbstractController
 {
-    #[Route('/', name: 'route_root', methods: ['GET'])]
-    public function index(ClockInterface $clock): Response
+    #[Route('/{mnu}', name: 'route_root', requirements: ['mnu' => '\d+'], methods: ['GET'])]
+    public function index(ClockInterface $clock, int $mnu = 0): Response
     {
         $currClock = $clock->withTimeZone('Europe/Warsaw')->now()->format('d-m-Y H:i:s');
         return $this->render('root/index.html.twig', [
             'currClock' => $currClock,
+            'mnu' => $mnu,
         ]);
     }
 

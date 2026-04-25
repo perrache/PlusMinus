@@ -4,8 +4,10 @@
 
 {% block stylesheets %}
     <style>
-        /*Layout - lewy kontent*/
         div.content1 {
+            margin-left: 70px;
+        }
+        div.content2 {
             margin-left: 50px;
         }
     </style>
@@ -16,24 +18,26 @@
         <h1>System PlusMinus</h1>
         <h4>Piotr Lewandowski</h4>
         <h4>{{ currClock }}</h4>
-        {% set close = '0' %}
         {% for key, mArray in sqlService.sqlArray %}
             {% if (key % 10 == 0) %}
-                {% set close = '0' %}
-                {#        {% if app.session.get("menu#{key}") is defined %} #}
-                {#            {% if app.session.get("menu#{key}") == '0' %} #}
-                {#                {% set close = '1' %} #}
-                {#            {% endif %} #}
-                {#        {% endif %} #}
-                {#        <div> #}
-                {#            <a href="{{ path('route_menu') }}/{{ key / 10 }}">{{ '%02u'|format(key) }}</a> #}
-                {#        </div> #}
-            {% else %}
-                {#        {% if close == '0' %} #}
-                {{ include('menu2.html.twig', {curTab: key, aElement: mArray['title']}) }}
-                {#        {% endif %} #}
+                <div>
+                    <a href="{{ path('route_root', {'mnu': key}) }}">{{ '%02u - '|format(key) }}{{ mArray['title'] }}</a>
+                </div>
             {% endif %}
         {% endfor %}
         <div>======</div>
     </div>
+    {% if mnu > 0 %}
+        <div class="content2">
+            <h1 style="visibility: hidden">{{ currClock }}</h1>
+            <h4 style="visibility: hidden">{{ currClock }}</h4>
+            <h4 style="visibility: hidden">{{ currClock }}</h4>
+            {% for key, mArray in sqlService.sqlArray %}
+                {% if mnu / 10 == key // 10 and key % 10 != 0 %}
+                    {{ include('menu2.html.twig', {curTab: key, aElement: mArray['title']}) }}
+                {% endif %}
+            {% endfor %}
+            <div>======</div>
+        </div>
+    {% endif %}
 {% endblock %}
