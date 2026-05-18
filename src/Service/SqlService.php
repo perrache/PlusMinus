@@ -350,6 +350,22 @@ order by m.dat desc, m.refer, m.id desc',
             'sql2' => '',
             'sql3' => '',
         ],
+        37 => [
+            'title' => 'Minus-Type-Transaction-Sum',
+            'sql1' => '
+select k.name||\' / \'||t.name stype,
+       r.name stransaction,
+       count(*) nile,
+       to_char(sum(m.value), :mask1) nvalue
+from minus m
+    join type t on t.id = m.type_id
+    join kind k on k.id = t.kind_id
+    join transaction r on r.id = m.transaction_id
+group by stype, stransaction
+order by stype, stransaction',
+            'sql2' => '',
+            'sql3' => '',
+        ],
         40 => [
             'title' => 'Report',
             'sql1' => '',
@@ -392,77 +408,67 @@ order by t2.mies nulls last',
             'sql3' => '',
         ],
         42 => [
-            'title' => 'Bottles',
+            'title' => 'Bottles-All',
             'sql1' => '
-select tab.oname||\' / \'||tab.aname saccount,
-       tab.id nid,
-       case c.code when \'PLN\' then \'\' else c.code end swal,
-       to_char(sum(tab.bo), :mask1) nbo,
-       to_char(sum(tab.val), :mask1) nsaldo,
-       to_char(sum(tab.val+tab.lt), :mask1) ndost
+select smies,
+       sdata,
+       stype,
+       to_char(sum(value), :mask1) nvalue,
+       scomment,
+       srefer
 from
-    (select o.name oname, a.name aname, a.id, a.bo, a.bo val, a.lt, a.currency_id
-     from account a
-         join organization o on o.id = a.organization_id
-     union all
-     select o.name oname, a.name aname, a.id, 0 bo, -m.value val, 0 lt, a.currency_id
+    (select to_char(m.dat, \'YYYY/MM\') smies,
+            k.name||\' / \'||t.name stype,
+            -m.value value,
+            to_char(m.dat, \'YYYY-MM-DD\') sdata,
+            m.comment scomment,
+            m.refer srefer
      from minus m
-         join account a on a.id = m.account_id
-         join organization o on o.id = a.organization_id
+         join type t on t.id = m.type_id
+         join kind k on k.id = t.kind_id
+     where t.name = \'Butelki\'
      union all
-     select o.name oname, a.name aname, a.id, 0 bo, p.value val, 0 lt, a.currency_id
+     select to_char(p.dat, \'YYYY/MM\') smies,
+            s.name stype,
+            p.value,
+            to_char(p.dat, \'YYYY-MM-DD\') sdata,
+            p.comment scomment,
+            p.refer srefer
      from plus p
-         join account a on a.id = p.account_id
-         join organization o on o.id = a.organization_id
+         join source s on s.id = p.source_id
+     where s.name = \'Butelki\') tab
+group by rollup (smies, sdata, stype), scomment, srefer
+order by smies desc nulls last, sdata desc nulls last, stype nulls last, scomment nulls last, srefer nulls last',
+            'sql2' => '',
+            'sql3' => '',
+        ],
+        43 => [
+            'title' => 'Bottles-Sum',
+            'sql1' => '
+select smies,
+       sdata,
+       stype,
+       to_char(sum(value), :mask1) nvalue
+from
+    (select to_char(m.dat, \'YYYY/MM\') smies,
+            k.name||\' / \'||t.name stype,
+            -m.value value,
+            to_char(m.dat, \'YYYY-MM-DD\') sdata
+     from minus m
+         join type t on t.id = m.type_id
+         join kind k on k.id = t.kind_id
+     where t.name = \'Butelki\'
      union all
-     select o.name oname, a.name aname, a.id, 0 bo, -pm.value val, 0 lt, a.currency_id
-     from move pm
-         join account a on a.id = pm.accminus_id
-         join organization o on o.id = a.organization_id
-     union all
-     select o.name oname, a.name aname, a.id, 0 bo, pm.value val, 0 lt, a.currency_id
-     from move pm
-         join account a on a.id = pm.accplus_id
-         join organization o on o.id = a.organization_id
-     ) tab
-        join currency c on c.id = tab.currency_id
-group by tab.oname||\' / \'||tab.aname, tab.id, c.code
-order by saccount',
-            'sql2' => '
-select k.name||\' / \'||t.name stype,
-       to_char(-m.value, :mask1) nvalue,
-       m.dat xdat,
-       to_char(m.dat, :mask3) sdata,
-       m.comment scomm
-from minus m
-    join type t on t.id = m.type_id
-    join kind k on k.id = t.kind_id
-where m.account_id = :id
-union all
-select \'+\' stype,
-       to_char(p.value, :mask1) nvalue,
-       p.dat xdat,
-       to_char(p.dat, :mask3) sdata,
-       p.comment scomm
-from plus p
-where p.account_id = :id
-union all
-select \'+-\' stype,
-       to_char(pm.value, :mask1) nvalue,
-       pm.dat xdat,
-       to_char(pm.dat, :mask3) sdata,
-       pm.comment scomm
-from move pm
-where pm.accplus_id = :id
-union all
-select \'+-\' stype,
-       to_char(-pm.value, :mask1) nvalue,
-       pm.dat xdat,
-       to_char(pm.dat, :mask3) sdata,
-       pm.comment scomm
-from move pm
-where pm.accminus_id = :id
-order by xdat desc, stype',
+     select to_char(p.dat, \'YYYY/MM\') smies,
+            s.name stype,
+            p.value,
+            to_char(p.dat, \'YYYY-MM-DD\') sdata
+     from plus p
+         join source s on s.id = p.source_id
+     where s.name = \'Butelki\') tab
+group by rollup (smies, sdata, stype)
+order by smies desc nulls last, sdata desc nulls last, stype nulls last',
+            'sql2' => '',
             'sql3' => '',
         ],
         50 => [

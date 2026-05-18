@@ -144,12 +144,13 @@ final class ImportController extends AbstractController
         return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/newminus/{iid}', name: 'app_minus_new1', methods: ['GET', 'POST'])]
+    #[Route('/newminus/{iid}/{plususe}', name: 'app_minus_new1', methods: ['GET', 'POST'])]
     public function minusnew1(Request                $request,
                               EntityManagerInterface $entityManager,
                               Connection             $conn,
                               AccountRepository      $accountRepository,
-                              int                    $iid = 0): Response
+                              int                    $iid = 0,
+                              int                    $plususe = 0): Response
     {
         if ($iid <= 0) return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
         try {
@@ -168,6 +169,13 @@ final class ImportController extends AbstractController
 //
             $entityManager->persist($minu);
             $entityManager->flush();
+            if ($plususe > 0) {
+                try {
+                    $res = $conn->prepare("update import1 set use = 1 where id = $iid")->executeStatement();
+                } catch (Exception $e) {
+                    return $this->redirectToRoute('route_root', [], Response::HTTP_SEE_OTHER);
+                }
+            }
             return $this->redirectToRoute('route_imp_import1', [], Response::HTTP_SEE_OTHER);
 //
         }

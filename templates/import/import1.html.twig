@@ -111,15 +111,12 @@
                     <td class="center">{{ record1.usealias }}</td>
                     <td>
                         <a href="{{ path('route_imp_import1Use', {'iid': record1.idalias}) }}">Use</a>
-                        {% if record1.value < 0 %}
-                            {% if record1.usealias == 0 %}
-                                <a href="{{ path('app_minus_new1', {'iid': record1.idalias}) }}">Import</a>
+                        {% if record1.usealias == 0 %}
+                            {% if record1.value < 0 %}
+                                <a href="{{ path('app_minus_new1', {'iid': record1.idalias}) }}">Minus</a>
+                                <a href="{{ path('app_minus_new1', {'iid': record1.idalias, 'plususe': 1}) }}">MinusUse</a>
                             {% endif %}
-                        {% endif %}
-                        {% if record1.value > 0 %}
-                            {% if record1.usealias == 0 %}
-                                <a href="{{ path('app_plus_new1', {'iid': record1.idalias}) }}">Import</a>
-                            {% endif %}
+                            <a href="{{ path('app_plus_new1', {'iid': record1.idalias}) }}">Plus</a>
                         {% endif %}
                     </td>
                 </tr>
