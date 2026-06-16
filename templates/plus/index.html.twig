@@ -13,6 +13,7 @@
             <th>Value</th>
             <th>Dat</th>
             <th>Comment</th>
+            <th>Refer</th>
             <th>actions</th>
         </tr>
         </thead>
@@ -23,6 +24,7 @@
                 <td>{{ plu.value }}</td>
                 <td>{{ plu.dat ? plu.dat|date('d-m-Y') : '' }}</td>
                 <td>{{ plu.comment }}</td>
+                <td>{{ plu.refer }}</td>
                 <td>
                     <a href="{{ path('app_plus_show', {'id': plu.id}) }}">show</a>
                     <a href="{{ path('app_plus_edit', {'id': plu.id}) }}">edit</a>

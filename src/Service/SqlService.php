@@ -319,7 +319,7 @@ order by smies desc, m.value desc',
             'sql3' => '',
         ],
         36 => [
-            'title' => 'Minus-Refer-Count',
+            'title' => 'Minus-Refer-Multi',
             'sql1' => '
 select to_char(m.dat, \'YYYY/MM\') smies,
        k.name skind,
@@ -346,7 +346,7 @@ where m.refer in
             from minus
             group by refer
             having count(*) > 1) t1)
-order by m.dat desc, m.refer, m.id desc',
+order by m.dat desc, m.refer, k.name, t.name, m.id desc',
             'sql2' => '',
             'sql3' => '',
         ],

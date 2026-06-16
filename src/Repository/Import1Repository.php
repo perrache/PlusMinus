@@ -43,7 +43,8 @@ select i.id idAlias,
        i.value,
        to_char(i.value, :mask1) valueAlias,
        i.last lastAlias,
-       i.use useAlias
+       i.use useAlias,
+       i.refer referAlias
 from import1 i
 where 1=1
 eof;
@@ -70,6 +71,7 @@ eof;
                     'valuealias' => 'ERR',
                     'lastalias' => 0,
                     'usealias' => 0,
+                    'referalias' => '',
                 ],
             ];
         }
@@ -90,6 +92,7 @@ eof;
                     'valuealias' => 'ERR',
                     'lastalias' => 0,
                     'usealias' => 0,
+                    'referalias' => '',
                 ],
             ];
         }

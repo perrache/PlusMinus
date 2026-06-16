@@ -21,6 +21,12 @@
     {% else %}
         {% block body %}{% endblock %}
     {% endif %}                             {# pozostałe ekrany zawierają divy z klasami #}
+    <div class="header">
+        {% include('header.html.twig') %}
+    </div>
+    <div class="footer">
+        {% include('footer.html.twig') %}
+    </div>
 </div>
 </body>
 </html>

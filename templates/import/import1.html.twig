@@ -82,6 +82,7 @@
                 <th>Kwota</th>
                 <th>Last</th>
                 <th>Use</th>
+                <th>Refer</th>
                 <th>&nbsp;</th>
             </tr>
             {% for record1 in records1 %}
@@ -109,6 +110,7 @@
                     </td>
                     <td class="center">{{ record1.lastalias }}</td>
                     <td class="center">{{ record1.usealias }}</td>
+                    <td class="left">{{ record1.referalias }}</td>
                     <td>
                         <a href="{{ path('route_imp_import1Use', {'iid': record1.idalias}) }}">Use</a>
                         {% if record1.usealias == 0 %}
