@@ -1,0 +1,130 @@
+/*Kanwa podstawowa*/
+html, body {
+    background-color: #000;
+    color: #fff;
+    margin: auto;
+    padding: 0;
+    width: 1600px;
+    font-family: Arial, Verdana, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/*Link*/
+a:link, a:visited, a:hover, a:active {
+    color: cyan;
+    text-decoration: none;
+}
+
+/*Div*/
+div {
+    padding: 5px;
+}
+
+/*=======================================*/
+
+/*Layout - header*/
+div.header {
+    grid-area: header;
+    position: sticky;
+    top: 0;
+    text-align: center;
+    height: 5vh;
+}
+
+/*Layout - menu*/
+div.menu {
+    grid-area: menu;
+    position: sticky;
+    top: 5vh;
+    bottom: 5vh;
+    overflow-y: scroll;
+    max-height: 90vh;
+    scrollbar-color: #444444 #222222;
+    scrollbar-gutter: auto;
+    scrollbar-width: auto;
+    align-self: start;
+}
+
+/*Layout - lewy kontent*/
+div.content1 {
+    grid-area: content1;
+}
+
+/*Layout - prawy kontent*/
+div.content2 {
+    grid-area: content2;
+}
+
+/*Layout - footer*/
+div.footer {
+    grid-area: footer;
+    text-align: center;
+    height: 5vh;
+}
+
+/*Layout - kontener*/
+div.container {
+    display: grid;
+    column-gap: 20px;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+'header header header'
+'menu content1 content2'
+'footer footer footer';
+    min-height: 100vh;
+    align-items: start;
+    justify-content: start;
+}
+
+/*=======================================*/
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px dashed;
+}
+
+tr:hover {
+    background-color: #333;
+}
+
+th {
+    text-align: center;
+    padding: 10px;
+}
+
+td {
+    text-align: left;
+    padding: 10px;
+}
+
+/*=======================================*/
+
+/*div.db {*/
+/*    padding-bottom: 15px;*/
+/*    padding-left: 0;*/
+/*}*/
+
+/*div.dt {*/
+/*    padding-top: 15px;*/
+/*    padding-left: 0;*/
+/*}*/
+
+div.new {
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+/*ul {*/
+/*    list-style-type: none;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
