@@ -16,6 +16,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,20 +25,23 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/imp')]
 final class ImportController extends AbstractController
 {
-    #[Route('/plikdotabeli1', name: 'route_imp_plikdotabeli1', methods: ['GET', 'POST'])]
-    public function plikdotabeli1(Request                $request,
-                                  StringConverter        $stringConverter,
-                                  ClockInterface         $clock,
-                                  EntityManagerInterface $entityManager,
-                                  Connection             $conn,
-                                  Import1Repository      $import1Repository): Response
+    #[Route('/fileintotable1', name: 'route_imp_fileintotable1', methods: ['GET', 'POST'])]
+    public function ftb1(Request                $request,
+                         StringConverter        $stringConverter,
+                         ClockInterface         $clock,
+                         LoggerInterface        $plusminusLogger,
+                         EntityManagerInterface $entityManager,
+                         Connection             $conn,
+                         Import1Repository      $import1Repository): Response
     {
         $form = $this->createForm(PlikDoTabeli1Type::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 //
             $logs = [];
-            $logs[] = $clock->withTimeZone('Europe/Warsaw')->now()->format('d-m-Y H:i:s');
+            $extra = $clock->withTimeZone('Europe/Warsaw')->now()->format('d-m-Y H:i:s');
+            $logs[] = $extra;
+            $plusminusLogger->info($extra);
             try {
                 $result = $conn->fetchAllAssociative('select count(*) c from account where import = 1');
             } catch (Exception $e) {
@@ -95,11 +99,15 @@ final class ImportController extends AbstractController
                             $entityManager->flush();
                         } else {
                             $rowCount2 += 1;
-//                            $logs[] = 'JUŻ ISTNIEJĄCY: ' . $fileRow[7];
+//                            $logs[] = 'EXISTED: ' . $fileRow[7];
                         }
                     }
-                    $logs[] = 'nazwa pliku: ' . $file;
-                    $logs[] = 'ilość wierszy ogółem: ' . $rowCount - 1 . ' w tym JUŻ ISTNIEJĄCYCH: ' . $rowCount2;
+                    $extra = 'File name: ' . $file;
+                    $logs[] = $extra;
+                    $plusminusLogger->info($extra);
+                    $extra = 'Total rows: ' . $rowCount - 1 . ' including NEW: ' . $rowCount - 1 - $rowCount2;
+                    $logs[] = $extra;
+                    $plusminusLogger->info($extra);
                 } else $logs[] = 'File open error: ' . $file;
             } else $logs[] = 'Error AccountImport';
             return $this->render('log/log.html.twig', ['logs' => $logs]);
