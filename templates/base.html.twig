@@ -6,6 +6,7 @@
     {% include('cssInternal.html.twig') %}
     {% block stylesheets %}{% endblock %}
     {% block javascripts %}{% endblock %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
 </head>
 <body>
 {% set curPath = app.current_route %}
